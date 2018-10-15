@@ -52,6 +52,70 @@ public class HealthMechanics {
         }
     }
 
+    // TODO new regen Method
+    public void HealthAutoRegen() {
+
+//        for(Player p : Bukkit.getServer().getOnlinePlayers()) {
+//            try {
+//                if(getPlayerHP(p.getName()) <= 0 && p.getHealth() <= 0) {
+//                    continue;
+//                } // They're dead anyway.
+//                if(FatigueMechanics.starving.contains(p)) {
+//                    continue;
+//                }
+//                if(in_combat.containsKey(p.getName())) {
+//                    continue;
+//                }
+//
+//                if(!(in_combat.containsKey(p.getName()))) {
+//                    double max_hp = getMaxHealthValue(p.getName());
+//                    double current_hp = getPlayerHP(p.getName());
+//                    double amount_to_heal = 5;
+//                    if(current_hp + 1 > max_hp) {
+//
+//                        if(p.getHealth() != 20) {
+//                            p.setHealth(20);
+//                        }
+//                        continue;
+//                    } // They're already full.
+//
+//                    amount_to_heal += getHealthRegenAmount(p);
+//
+//                    if((current_hp + amount_to_heal) >= max_hp) { // We don't need to overheal.
+//                        p.setHealth(20);
+//                        //p.setLevel((int)max_hp);
+//                        HealthMechanics.setPlayerHP(p.getName(), (int) max_hp);
+//                        setPlayerHP(p.getName(), (int) max_hp);
+//                        continue;
+//                    }
+//
+//                    else if(p.getHealth() <= 19 && ((current_hp + amount_to_heal) < max_hp)) {
+//                        //p.setLevel((int)(p.getLevel() + amount_to_heal));
+//                        setPlayerHP(p.getName(), (int) (getPlayerHP(p.getName()) + amount_to_heal));
+//                        double health_percent = (getPlayerHP(p.getName()) + amount_to_heal) / max_hp;
+//                        double new_health_display = health_percent * 20;
+//                        if(new_health_display >= 19.50) { // It will be 20 hearts...
+//                            if(health_percent >= 1.0D) { // If we should have full HP.
+//                                new_health_display = 20;
+//                            } else { // If we should not have full HP.
+//                                new_health_display = 19;
+//                            }
+//                        }
+//                        if(new_health_display < 1) {
+//                            new_health_display = 1;
+//                        }
+//                        p.setHealth((int) new_health_display);
+//                        continue;
+//                    }
+//                }
+//            } catch(NullPointerException npe) {
+//                npe.printStackTrace();
+//                continue;
+//            }
+//        }
+
+    }
+
     public static void updateHealth() {
 
         Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();

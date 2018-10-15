@@ -1,10 +1,8 @@
 package me.Vinstaal0.Mechanics.Monsters.Base;
 
+import net.minecraft.server.v1_13_R2.EntityZombie;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Zombie;
 
 import me.Vinstaal0.Mechanics.Items.Armour;
 import me.Vinstaal0.Mechanics.Items.Weapon;
@@ -13,6 +11,10 @@ import me.Vinstaal0.Mechanics.Monsters.FKmob;
 import me.Vinstaal0.Utility.EnumHelp;
 import me.Vinstaal0.Utility.Rarity;
 import me.Vinstaal0.Utility.Tier;
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Zombie;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.

@@ -1,0 +1,34 @@
+name: Fk.Minigame
+main: me.Vinstaal0.Minigame
+version: 1.0
+commands:
+  createarmour:
+    description: creates a new armour
+    usage: /createArmour
+  createweapon:
+    description: creates a new weapon
+    usage: /createWeapon
+  test:
+    description: test command
+    usage: /test
+  gm:
+    description: toggles your gamemode
+    usage: /gm
+  getstats:
+    description: gets the users stats
+    usage: /getstats
+  spawnmob:
+    description: spawns an armored zombie
+    usage: /spawnmob
+  createset:
+    description: creates a full set
+    usage: /createset
+  gl:
+    description: send a global message
+    usage: /gl <msg>
+  orb:
+    description: rerolls the stats
+    usage: /orb
+  enchant:
+    description: enchants the item
+    usage: /enchant
