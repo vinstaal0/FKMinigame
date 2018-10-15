@@ -1,5 +1,6 @@
 package me.Vinstaal0.Mechanics;
 
+import me.Vinstaal0.Mechanics.Monsters.Base.FKZombie;
 import me.Vinstaal0.Minigame;
 import me.Vinstaal0.Utility.Tier;
 import org.bukkit.Location;

@@ -32,8 +32,11 @@ public class Currency {
         ItemStack item = new ItemStack(Material.DIAMOND);
         ItemMeta im = item.getItemMeta();
 
+        List<String> lore = new ArrayList<String>();
+
         im.setDisplayName(ChatColor.AQUA + "Diamond");
-        im.setLore(ChatColor.GRAY + "The premium currency of [TBD]");
+        lore.add(ChatColor.GRAY + "The premium currency of [TBD]");
+        im.setLore(lore);
 
         item.setItemMeta(im);
 
@@ -44,10 +47,13 @@ public class Currency {
         ItemStack item = new ItemStack(Material.PAPER);
         ItemMeta im = item.getItemMeta();
 
-        im.setDisplayName(ChatColor.WHITE + "Bank note");
-        im.setLore(ChatColor.GRAY + "Value: " + value);
+        List<String> lore = new ArrayList<String>();
 
-        item.setItemmeta(im);
+        im.setDisplayName(ChatColor.WHITE + "Bank note");
+        lore.add(ChatColor.GRAY + "Value: " + value);
+        im.setLore(lore);
+
+        item.setItemMeta(im);
 
         return item;
     }

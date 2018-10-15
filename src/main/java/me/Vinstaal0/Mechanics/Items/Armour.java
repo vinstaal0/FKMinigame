@@ -1,5 +1,6 @@
 package me.Vinstaal0.Mechanics.Items;
 
+import me.Vinstaal0.Mechanics.ItemMechanics;
 import me.Vinstaal0.Utility.EnumHelp;
 import me.Vinstaal0.Utility.Rarity;
 import me.Vinstaal0.Utility.Tier;

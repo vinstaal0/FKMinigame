@@ -28,7 +28,7 @@ public class SpawnMobCommand implements CommandExecutor {
             return false;
         }
 
-        Location loc = player.getTargetBlock((HashSet <Byte>) null, 200).getLocation();
+        Location loc = player.getTargetBlock(null, 200).getLocation();
         Location loc_ = loc.add(0, 1, 0);
 
         Minigame.monsterMechanics.spawnZombie(loc_, Tier.FOUR);

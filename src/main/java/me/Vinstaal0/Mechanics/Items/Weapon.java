@@ -96,16 +96,16 @@ public class Weapon implements implItem {
         int type = this.type;
 
         if (tier == Tier.ONE && type == 1) {
-            material = Material.WOOD_SWORD;
+            material = Material.WOODEN_SWORD;
             name = ChatColor.GRAY + "Wooden Sword";
         } else if (tier == Tier.ONE && type == 2) {
-            material = Material.WOOD_AXE;
+            material = Material.WOODEN_AXE;
             name = ChatColor.GRAY + "Wooden Axe";
         } else if (tier == Tier.ONE && type == 3) {
-            material = Material.WOOD_SPADE;
+            material = Material.WOODEN_SHOVEL;
             name = ChatColor.GRAY + "Wooden Polearm";
         } else if (tier == Tier.ONE && type == 4) {
-            material = Material.WOOD_HOE;
+            material = Material.WOODEN_HOE;
             name = ChatColor.GRAY + "Wooden Staff";
         } else if (tier == Tier.ONE && type == 5) {
             material = Material.BOW;
@@ -118,7 +118,7 @@ public class Weapon implements implItem {
             material = Material.STONE_AXE;
             name = ChatColor.GREEN + "Stone Axe";
         } else if (tier == Tier.TWO && type == 3) {
-            material = Material.STONE_SPADE;
+            material = Material.STONE_SHOVEL;
             name = ChatColor.GREEN + "Stone Polearm";
         } else if (tier == Tier.TWO && type == 4) {
             material = Material.STONE_HOE;
@@ -135,7 +135,7 @@ public class Weapon implements implItem {
             material = Material.IRON_AXE;
             name = ChatColor.AQUA + "Steel Axe";
         } else if (tier == Tier.TREE && type == 3) {
-            material = Material.IRON_SPADE;
+            material = Material.IRON_SHOVEL;
             name = ChatColor.AQUA + "Steel Polearm";
         } else if (tier == Tier.TREE && type == 4) {
             material = Material.IRON_HOE;
@@ -152,7 +152,7 @@ public class Weapon implements implItem {
             material = Material.DIAMOND_AXE;
             name = ChatColor.DARK_PURPLE + "Ivory Axe";
         } else if (tier == Tier.FOUR && type == 3) {
-            material = Material.DIAMOND_SPADE;
+            material = Material.DIAMOND_SHOVEL;
             name = ChatColor.DARK_PURPLE + "Ivory Polearm";
         } else if (tier == Tier.FOUR && type == 4) {
             material = Material.DIAMOND_HOE;
@@ -163,16 +163,16 @@ public class Weapon implements implItem {
         }
 
         else if (tier == Tier.FIVE && type == 1) {
-            material = Material.GOLD_SWORD;
+            material = Material.GOLDEN_SWORD;
             name = ChatColor.YELLOW + "Golden Sword";
         } else if (tier == Tier.FIVE && type == 2) {
-            material = Material.GOLD_AXE;
+            material = Material.GOLDEN_AXE;
             name = ChatColor.YELLOW + "Golden Axe";
         } else if (tier == Tier.FIVE && type == 3) {
-            material = Material.GOLD_SPADE;
+            material = Material.GOLDEN_SHOVEL;
             name = ChatColor.YELLOW + "Golden Polearm";
         } else if (tier == Tier.FIVE && type == 4) {
-            material = Material.GOLD_HOE;
+            material = Material.GOLDEN_HOE;
             name = ChatColor.YELLOW + "Golden Staff";
         } else if (tier == Tier.FIVE && type == 5) {
             material = Material.BOW;

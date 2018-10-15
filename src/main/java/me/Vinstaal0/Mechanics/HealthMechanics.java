@@ -6,12 +6,14 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import me.Vinstaal0.Minigame;
 import me.Vinstaal0.Player.PlayerStats;
 import me.Vinstaal0.Utility.Tier;
-import me.confuser.barapi.BarAPI;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -93,7 +95,10 @@ public class HealthMechanics {
             Double currentHP = player.getHealth();
             Double maxHP = PlayerStats.getMaxHP(player.getUniqueId());
 
-            BarAPI.setMessage(player, ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue());
+            BossBar bar = Bukkit.createBossBar(ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue(), BarColor.RED, BarStyle.SEGMENTED_10);
+            bar.addPlayer(player);
+
+//            BarAPI.setMessage(player, ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue());
         }
 
     }

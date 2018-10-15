@@ -15,7 +15,7 @@ import me.Vinstaal0.Mechanics.HealthMechanics;
 /**
  * Created by Vinstaal0 on 15-10-2018.
  */
-public class PlayerListener {
+public class PlayerListener implements Listener {
 
     public PlayerListener(Minigame plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
