@@ -1,6 +1,8 @@
 package me.Vinstaal0.Commands;
 
 import java.util.HashSet;
+
+import me.Vinstaal0.Utility.EnumHelp;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,6 +34,10 @@ public class SpawnMobCommand implements CommandExecutor {
         Location loc_ = loc.add(0, 1, 0);
 
         Minigame.monsterMechanics.spawnZombie(loc_, Tier.FOUR);
+
+        if (args.length == 0) {
+            Minigame.monsterMechanics.spawnZombie(loc_, null);
+        }
 
         return true;
     }

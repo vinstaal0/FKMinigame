@@ -20,6 +20,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -38,22 +39,111 @@ public class FKZombie extends EntityZombie implements FKmob{
             zombie = (Zombie) mob;
         }
 
-        zombie.setCustomName("[-] Testing");
+        if (tier == null) {
+            zombie.setCustomName("[-] Testing");
 
-        ItemStack helmet = new Armour(1).getItem();
-        ItemStack chestPlate = new Armour(2).getItem();
-        ItemStack leggings = new Armour(3).getItem();
-        ItemStack boots = new Armour(4).getItem();
+            ItemStack helmet = new Armour(1).getItem();
+            ItemStack chestPlate = new Armour(2).getItem();
+            ItemStack leggings = new Armour(3).getItem();
+            ItemStack boots = new Armour(4).getItem();
 
-        zombie.getEquipment().setHelmet(helmet);
-        zombie.getEquipment().setChestplate(chestPlate);
-        zombie.getEquipment().setLeggings(leggings);
-        zombie.getEquipment().setBoots(boots);
+            zombie.getEquipment().setHelmet(helmet);
+            zombie.getEquipment().setChestplate(chestPlate);
+            zombie.getEquipment().setLeggings(leggings);
+            zombie.getEquipment().setBoots(boots);
 
-        zombie.getEquipment().setItemInMainHand(new Weapon().getItem());
+            zombie.getEquipment().setItemInMainHand(new Weapon().getItem());
 
-        zombie.setCanPickupItems(false);
-        zombie.setBaby(false);
+            zombie.setCanPickupItems(false);
+            zombie.setBaby(false);
+
+            Double hp = 0.0;
+
+            ItemStack[] armour = {helmet, chestPlate, leggings, boots};
+
+            for (ItemStack armorPiece : armour) {
+                if (ItemMechanics.isArmor(armorPiece)) {
+                    List<String> lore = armorPiece.getItemMeta().getLore();
+//                pieceTiers.add(ItemMechanics.getTier(armorPiece));
+
+                    for (String line : lore) {
+                        // get hps
+                        if (line.contains("HPs") || line.contains("HP REGEN")) {
+
+                            // keep after hps
+                        } else if (line.contains("HP"))
+                            hp += ItemMechanics.getStat(armorPiece, lore.indexOf(line));
+                    }
+                }
+            }
+
+            zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
+            zombie.setHealth(hp);
+        }
+
+
+    }
+
+    public FKZombie (World world, Location loc, Tier tier, int type) {
+        super(((CraftWorld)world).getHandle());
+
+        Entity mob = world.spawnEntity(loc, EntityType.ZOMBIE);
+
+        if (mob instanceof Zombie) {
+            zombie = (Zombie) mob;
+        }
+    }
+
+    @Override
+    public void giveArmour() {
+        int randomNum = ThreadLocalRandom.current().nextInt(1, 8 + 1);
+        giveArmour(randomNum);
+    }
+
+    @Override
+    public void giveArmour(int type) {
+
+        ItemStack helmet = null;
+        ItemStack chestPlate = null;
+        ItemStack leggings = null;
+        ItemStack boots = null;
+
+        switch(type) {
+            case 1 :
+                break;
+            case 2 :
+                chestPlate = new Armour(this.tier, 2).getItem();
+                break;
+            case 3 :
+                leggings = new Armour(this.tier, 3).getItem();
+                break;
+            case 4 :
+                boots = new Armour(this.tier, 4).getItem();
+                break;
+            case 5 :
+                chestPlate = new Armour(this.tier, 2).getItem();
+                leggings = new Armour(this.tier, 3).getItem();
+                break;
+            case 6 :
+                leggings = new Armour(this.tier, 3).getItem();
+                boots = new Armour(this.tier, 4).getItem();
+                break;
+            case 7 :
+                chestPlate = new Armour(this.tier, 2).getItem();
+                boots = new Armour(this.tier, 4).getItem();
+                break;
+            case 8 :
+                chestPlate = new Armour(this.tier, 2).getItem();
+                leggings = new Armour(this.tier, 3).getItem();
+                boots = new Armour(this.tier, 4).getItem();
+                break;
+            default :
+                helmet = new Armour(this.tier, 1).getItem();
+                chestPlate = new Armour(this.tier, 2).getItem();
+                leggings = new Armour(this.tier, 3).getItem();
+                boots = new Armour(this.tier, 4).getItem();
+                break;
+        }
 
         Double hp = 0.0;
 
@@ -62,7 +152,6 @@ public class FKZombie extends EntityZombie implements FKmob{
         for (ItemStack armorPiece : armour) {
             if (ItemMechanics.isArmor(armorPiece)) {
                 List<String> lore = armorPiece.getItemMeta().getLore();
-//                pieceTiers.add(ItemMechanics.getTier(armorPiece));
 
                 for (String line : lore) {
                     // get hps
@@ -73,55 +162,6 @@ public class FKZombie extends EntityZombie implements FKmob{
                         hp += ItemMechanics.getStat(armorPiece, lore.indexOf(line));
                 }
             }
-        }
-
-        zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
-        zombie.setHealth(hp);
-    }
-
-    @Override
-    public void giveArmour() {
-        giveArmour(0);
-    }
-
-    @Override
-    public void giveArmour(int type) {
-
-        switch(type) {
-            case 1 :
-                break;
-            case 2 :
-                this.zombie.getEquipment().setChestplate(new Armour(this.tier, 2).getItem());
-                break;
-            case 3 :
-                this.zombie.getEquipment().setLeggings(new Armour(this.tier, 3).getItem());
-                break;
-            case 4 :
-                this.zombie.getEquipment().setBoots(new Armour(this.tier, 4).getItem());
-                break;
-            case 5 :
-                this.zombie.getEquipment().setChestplate(new Armour(this.tier, 2).getItem());
-                this.zombie.getEquipment().setLeggings(new Armour(this.tier, 3).getItem());
-                break;
-            case 6 :
-                this.zombie.getEquipment().setLeggings(new Armour(this.tier, 3).getItem());
-                this.zombie.getEquipment().setBoots(new Armour(this.tier, 4).getItem());
-                break;
-            case 7 :
-                this.zombie.getEquipment().setChestplate(new Armour(this.tier, 2).getItem());
-                this.zombie.getEquipment().setBoots(new Armour(this.tier, 4).getItem());
-                break;
-            case 8 :
-                this.zombie.getEquipment().setChestplate(new Armour(this.tier, 2).getItem());
-                this.zombie.getEquipment().setLeggings(new Armour(this.tier, 3).getItem());
-                this.zombie.getEquipment().setBoots(new Armour(this.tier, 4).getItem());
-                break;
-            default :
-                this.zombie.getEquipment().setHelmet(new Armour(this.tier, 1).getItem());
-                this.zombie.getEquipment().setChestplate(new Armour(this.tier, 2).getItem());
-                this.zombie.getEquipment().setLeggings(new Armour(this.tier, 3).getItem());
-                this.zombie.getEquipment().setBoots(new Armour(this.tier, 4).getItem());
-                break;
         }
 
     }
