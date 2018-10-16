@@ -9,6 +9,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import me.Vinstaal0.Minigame;
@@ -171,23 +172,35 @@ public class HealthMechanics {
         }
     }
 
+    private static HashMap<UUID, BossBar> bbstore = new HashMap<>();
+
     @SuppressWarnings("deprecation")
     public static void updateOverHeadBar(Player player) {
 
         if (player != null) {
-            Double currentHP = player.getHealth();
             Double maxHP = PlayerStats.getMaxHP(player.getUniqueId());
+            Double currentHP = player.getHealth();
 
-            final BossBar bar = Bukkit.createBossBar(ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue(), BarColor.RED, BarStyle.SEGMENTED_10);
-            bar.addPlayer(player);
+            player.sendMessage(ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue());
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                public void run() {
-                    bar.removeAll();
+            if (!bbstore.containsKey(player.getUniqueId())) {
+                BossBar bar = Bukkit.createBossBar(ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue(), BarColor.RED, BarStyle.SEGMENTED_10);
+                bar.addPlayer(player);
+                bbstore.put(player.getUniqueId(), bar);
+            } else {
+                BossBar bar = bbstore.get(player.getUniqueId());
+                bar.setTitle(ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue());
+
+                Double percentage = currentHP / maxHP;
+
+                try {
+                    bar.setProgress(percentage);
+                } catch (IllegalArgumentException ignored) {
+                    //TODO check later after fixing order of health update
+                    bar.setProgress(0.99);
                 }
-            }, 20L);
+            }
 
-//            BarAPI.setMessage(player, ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue());
         }
 
     }

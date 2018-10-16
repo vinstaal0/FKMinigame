@@ -1,5 +1,6 @@
 package me.Vinstaal0.Mechanics.Monsters.Base;
 
+import me.Vinstaal0.Mechanics.ItemMechanics;
 import net.minecraft.server.v1_13_R2.EntityZombie;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -11,10 +12,14 @@ import me.Vinstaal0.Mechanics.Monsters.FKmob;
 import me.Vinstaal0.Utility.EnumHelp;
 import me.Vinstaal0.Utility.Rarity;
 import me.Vinstaal0.Utility.Tier;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -35,18 +40,43 @@ public class FKZombie extends EntityZombie implements FKmob{
 
         zombie.setCustomName("[-] Testing");
 
-        zombie.getEquipment().setHelmet(new Armour(1).getItem());
-        zombie.getEquipment().setChestplate(new Armour(2).getItem());
-        zombie.getEquipment().setLeggings(new Armour(3).getItem());
-        zombie.getEquipment().setBoots(new Armour(4).getItem());
+        ItemStack helmet = new Armour(1).getItem();
+        ItemStack chestPlate = new Armour(2).getItem();
+        ItemStack leggings = new Armour(3).getItem();
+        ItemStack boots = new Armour(4).getItem();
 
-        zombie.getEquipment().setItemInHand(new Weapon().getItem());
+        zombie.getEquipment().setHelmet(helmet);
+        zombie.getEquipment().setChestplate(chestPlate);
+        zombie.getEquipment().setLeggings(leggings);
+        zombie.getEquipment().setBoots(boots);
+
+        zombie.getEquipment().setItemInMainHand(new Weapon().getItem());
 
         zombie.setCanPickupItems(false);
         zombie.setBaby(false);
 
-        zombie.setMaxHealth(20000);
-        zombie.setHealth(20000);
+        Double hp = 0.0;
+
+        ItemStack[] armour = {helmet, chestPlate, leggings, boots};
+
+        for (ItemStack armorPiece : armour) {
+            if (ItemMechanics.isArmor(armorPiece)) {
+                List<String> lore = armorPiece.getItemMeta().getLore();
+//                pieceTiers.add(ItemMechanics.getTier(armorPiece));
+
+                for (String line : lore) {
+                    // get hps
+                    if (line.contains("HPs") || line.contains("HP REGEN")) {
+
+                        // keep after hps
+                    } else if (line.contains("HP"))
+                        hp += ItemMechanics.getStat(armorPiece, lore.indexOf(line));
+                }
+            }
+        }
+
+        zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
+        zombie.setHealth(hp);
     }
 
     @Override
