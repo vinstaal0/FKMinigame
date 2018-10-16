@@ -1,6 +1,7 @@
 name: Fk.Minigame
 main: me.Vinstaal0.Minigame
 version: 1.0
+api-version: 1.13
 commands:
   createarmour:
     description: creates a new armour

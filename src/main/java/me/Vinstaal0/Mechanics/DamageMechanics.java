@@ -20,6 +20,8 @@ public class DamageMechanics implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
+    // TODO rework calculating damage, doesn't calculate correctly (DMG and Display is not the same)
+
     @SuppressWarnings("deprecation")
     @EventHandler
     public void playerDMG(EntityDamageByEntityEvent event) {
@@ -29,7 +31,9 @@ public class DamageMechanics implements Listener {
         if (event.getEntity() instanceof Player) {
             defender = (Player) event.getEntity();
 
-            PlayerStats.inCombat(defender.getUniqueId());
+            HealthMechanics.in_combat.put(defender.getName(), System.currentTimeMillis());
+
+            System.out.println(defender.getName() + " is now in combat!");
         }
         Creature attacker = null;
 
@@ -95,7 +99,11 @@ public class DamageMechanics implements Listener {
         if (event.getDamager() instanceof Player) {
             attacker = (Player) event.getDamager();
 
-            PlayerStats.inCombat(attacker.getUniqueId());
+            HealthMechanics.in_combat.put(attacker.getName(), System.currentTimeMillis());
+
+            System.out.println(attacker.getName() + " is now in combat!");
+
+//            PlayerStats.inCombat(attacker.getUniqueId());
         }
 
         if (defender != null || attacker != null) {

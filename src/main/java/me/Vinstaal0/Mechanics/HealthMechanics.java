@@ -1,11 +1,11 @@
 package me.Vinstaal0.Mechanics;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -14,18 +14,81 @@ import org.bukkit.inventory.ItemStack;
 import me.Vinstaal0.Minigame;
 import me.Vinstaal0.Player.PlayerStats;
 import me.Vinstaal0.Utility.Tier;
+import org.bukkit.plugin.Plugin;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
  */
 public class HealthMechanics {
 
+    public static ConcurrentHashMap<String, Long> in_combat = new ConcurrentHashMap<>();
+    // A list of all players in combat and the last time they were in a combat situation.
+
+    public static int HealthRegenCombatDelay = 10;
+    // Interval (in seconds) between last instance of a combat acivity and the start of auto HP regen.
+
+    static Plugin plugin = null;
+
     public HealthMechanics(Minigame minigame) {
 
         updateHealth();
+        plugin = minigame;
+
+        Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+
+                for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+
+                    if (!in_combat.containsKey(player.getName())) {
+                        regenPlayer(player);
+                    }
+                }
+
+            }
+        },40L, 20L);
+
+        // "in combat" Handler, removes players from the in_combat list after 'HealthRegenCombatDelay' is over.
+        Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+            public void run() {
+                if(!in_combat.isEmpty()) {
+                    Map<String, Long> hmash = new HashMap<String, Long>(in_combat);
+                    for(Map.Entry<String, Long> entry : hmash.entrySet()) {
+                        String p_name = entry.getKey();
+                        if(cooldownOver(p_name)) {
+                            in_combat.remove(p_name);
+
+                            System.out.println(p_name + " is now out of combat!");
+                        }
+                    }
+                }
+            }
+        }, 40L, 20L);
 
     }
 
+    public static boolean cooldownOver(String p_name) {
+        if(!in_combat.containsKey(p_name)) {
+            return true;
+        }
+
+        long oldTime = getOldTime(p_name);
+        long currentTime = System.currentTimeMillis();
+        if(currentTime - oldTime >= (HealthRegenCombatDelay * 1000)) {
+
+            return true;
+
+        } else {
+
+            return false;
+        }
+    }
+
+    public static long getOldTime(String p_name) {
+        return in_combat.get(p_name);
+    }
+
+    //TODO Update
     public static void regenPlayer(Player player) {
 
         if (PlayerStats.getMaxHP(player.getUniqueId()) != player.getHealth()) {
@@ -36,84 +99,28 @@ public class HealthMechanics {
                 int regen = PlayerStats.getMaxHPs(player.getUniqueId());
                 Double currentHP = player.getHealth() + regen;
 
+                player.sendMessage(ChatColor.GREEN + "Regen +" + ChatColor.BOLD + "" + regen);
+
+                System.out.println("Player " + player.getName() + " GENERIC MAX HEALTH = " + player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+
                 try {
-                    player.setHealth(currentHP);
+                    if (currentHP > player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+                        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                    } else {
+                        player.setHealth(currentHP);
+                    }
+
                 } catch (IllegalArgumentException e) {
                     // Full heal
-                    player.setHealth(player.getMaxHealth());
+                    e.printStackTrace();
+                    player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                 }
 
                 updateHealth(player);
-
             }
-
         } else {
             PlayerStats.setFullHealth(player.getUniqueId(), true);
         }
-    }
-
-    // TODO new regen Method
-    public void HealthAutoRegen() {
-
-//        for(Player p : Bukkit.getServer().getOnlinePlayers()) {
-//            try {
-//                if(getPlayerHP(p.getName()) <= 0 && p.getHealth() <= 0) {
-//                    continue;
-//                } // They're dead anyway.
-//                if(FatigueMechanics.starving.contains(p)) {
-//                    continue;
-//                }
-//                if(in_combat.containsKey(p.getName())) {
-//                    continue;
-//                }
-//
-//                if(!(in_combat.containsKey(p.getName()))) {
-//                    double max_hp = getMaxHealthValue(p.getName());
-//                    double current_hp = getPlayerHP(p.getName());
-//                    double amount_to_heal = 5;
-//                    if(current_hp + 1 > max_hp) {
-//
-//                        if(p.getHealth() != 20) {
-//                            p.setHealth(20);
-//                        }
-//                        continue;
-//                    } // They're already full.
-//
-//                    amount_to_heal += getHealthRegenAmount(p);
-//
-//                    if((current_hp + amount_to_heal) >= max_hp) { // We don't need to overheal.
-//                        p.setHealth(20);
-//                        //p.setLevel((int)max_hp);
-//                        HealthMechanics.setPlayerHP(p.getName(), (int) max_hp);
-//                        setPlayerHP(p.getName(), (int) max_hp);
-//                        continue;
-//                    }
-//
-//                    else if(p.getHealth() <= 19 && ((current_hp + amount_to_heal) < max_hp)) {
-//                        //p.setLevel((int)(p.getLevel() + amount_to_heal));
-//                        setPlayerHP(p.getName(), (int) (getPlayerHP(p.getName()) + amount_to_heal));
-//                        double health_percent = (getPlayerHP(p.getName()) + amount_to_heal) / max_hp;
-//                        double new_health_display = health_percent * 20;
-//                        if(new_health_display >= 19.50) { // It will be 20 hearts...
-//                            if(health_percent >= 1.0D) { // If we should have full HP.
-//                                new_health_display = 20;
-//                            } else { // If we should not have full HP.
-//                                new_health_display = 19;
-//                            }
-//                        }
-//                        if(new_health_display < 1) {
-//                            new_health_display = 1;
-//                        }
-//                        p.setHealth((int) new_health_display);
-//                        continue;
-//                    }
-//                }
-//            } catch(NullPointerException npe) {
-//                npe.printStackTrace();
-//                continue;
-//            }
-//        }
-
     }
 
     public static void updateHealth() {
@@ -127,7 +134,6 @@ public class HealthMechanics {
 
     public static void updateHealth(Player player) {
 
-        @SuppressWarnings("unused")
         ArrayList<Tier> tier = getStats(player);
 
         Double maxHP = PlayerStats.getMaxHP(player.getUniqueId());
@@ -152,6 +158,19 @@ public class HealthMechanics {
 
     }
 
+    public static void refreshHealth(Player player) {
+
+        if (player != null) {
+            double maxHP = PlayerStats.getMaxHP(player.getUniqueId());
+
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHP);
+
+            player.setHealthScale(20.0);
+
+            updateOverHeadBar(player);
+        }
+    }
+
     @SuppressWarnings("deprecation")
     public static void updateOverHeadBar(Player player) {
 
@@ -159,27 +178,18 @@ public class HealthMechanics {
             Double currentHP = player.getHealth();
             Double maxHP = PlayerStats.getMaxHP(player.getUniqueId());
 
-            BossBar bar = Bukkit.createBossBar(ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue(), BarColor.RED, BarStyle.SEGMENTED_10);
+            final BossBar bar = Bukkit.createBossBar(ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue(), BarColor.RED, BarStyle.SEGMENTED_10);
             bar.addPlayer(player);
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                public void run() {
+                    bar.removeAll();
+                }
+            }, 20L);
 
 //            BarAPI.setMessage(player, ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue());
         }
 
-    }
-
-    public static void refreshHealth(Player player) {
-
-        if (player != null) {
-            double maxHP = PlayerStats.getMaxHP(player.getUniqueId());
-
-            player.setMaxHealth(maxHP);
-
-            player.setHealthScale(20.0);
-
-            player.setHealthScaled(true);
-
-            updateOverHeadBar(player);
-        }
     }
 
     public static ArrayList<Tier> getStats(Player player) {

@@ -33,20 +33,20 @@ public class FKZombie extends EntityZombie implements FKmob{
             zombie = (Zombie) mob;
         }
 
-//        zombie.setCustomName("[-] Testing");
-//
-//        zombie.getEquipment().setHelmet(new Armour(1).getItem());
-//        zombie.getEquipment().setChestplate(new Armour(2).getItem());
-//        zombie.getEquipment().setLeggings(new Armour(3).getItem());
-//        zombie.getEquipment().setBoots(new Armour(4).getItem());
-//
-//        zombie.getEquipment().setItemInHand(new Weapon().getItem());
-//
-//        zombie.setCanPickupItems(false);
-//        zombie.setBaby(false);
-//
-//        zombie.setMaxHealth(20000);
-//        zombie.setHealth(20000);
+        zombie.setCustomName("[-] Testing");
+
+        zombie.getEquipment().setHelmet(new Armour(1).getItem());
+        zombie.getEquipment().setChestplate(new Armour(2).getItem());
+        zombie.getEquipment().setLeggings(new Armour(3).getItem());
+        zombie.getEquipment().setBoots(new Armour(4).getItem());
+
+        zombie.getEquipment().setItemInHand(new Weapon().getItem());
+
+        zombie.setCanPickupItems(false);
+        zombie.setBaby(false);
+
+        zombie.setMaxHealth(20000);
+        zombie.setHealth(20000);
     }
 
     @Override

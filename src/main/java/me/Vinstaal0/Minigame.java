@@ -41,45 +41,6 @@ public class Minigame extends JavaPlugin {
 
         monsterMechanics = new MonsterMechanics(this);
 
-        BukkitScheduler scheduler = getServer().getScheduler();
-
-        scheduler.scheduleSyncDelayedTask(this, new Runnable() {
-            @Override
-            public void run() {
-                if (Bukkit.getOnlinePlayers() != null) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-//						try {
-//							PlayerStats.getInCombat(player.getUniqueId());
-//						} catch (NullPointerException e) {
-//							PlayerStats.setInCombat(player.getUniqueId(), false);
-//						}
-
-                        if (PlayerStats.getInCombat(player.getUniqueId()) == false) {
-                            HealthMechanics.regenPlayer(player);
-                        }
-                        HealthMechanics.updateHealth(player);
-                    }
-                }
-            }
-        }, 30L);
-
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-
-            public void run() {
-
-                if (Bukkit.getOnlinePlayers() != null) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-
-                        if (PlayerStats.getInCombat(player.getUniqueId()) == false) {
-                            HealthMechanics.regenPlayer(player);
-                        }
-
-                        HealthMechanics.updateHealth(player);
-                    }
-                }
-            }
-        }, 10, 30);
-
     }
 
     @Override

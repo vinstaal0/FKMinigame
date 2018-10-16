@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import org.bukkit.plugin.Plugin;
 import me.Vinstaal0.Minigame;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -50,6 +53,7 @@ public class PlayerStats {
     private static HashMap<UUID, Integer> maxArmorPen = new HashMap<UUID, Integer>();
     private static HashMap<UUID, Integer> maxBlind = new HashMap<UUID, Integer>();
 
+    @Deprecated
     private static HashMap<UUID, Boolean> inCombat = new HashMap<UUID, Boolean>();
 
     public PlayerStats(Minigame plugin) {
@@ -322,51 +326,5 @@ public class PlayerStats {
         PlayerStats.maxBlind.put(uuid, maxBlind);
     }
 
-    public static boolean getInCombat(UUID uuid) {
-
-        try {
-            return inCombat.get(uuid);
-        } catch (NullPointerException e) {
-            PlayerStats.setInCombat(uuid, false);
-            return false;
-        }
-
-    }
-
-    public static void setInCombat(UUID uuid, boolean inCombat) {
-        PlayerStats.inCombat.put(uuid, inCombat);
-    }
-
-    //TODO rework inCombat
-
-    static int id = 99999;
-
-    public static void inCombat(UUID uuid) {
-
-        final UUID u = uuid;
-
-        System.out.println("in combat");
-
-        PlayerStats.setInCombat(u, true);
-
-        if (id != 99999) {
-            plugin.getServer().getScheduler().cancelTask(id);
-        }
-
-        id = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-
-            @Override
-            public void run() {
-
-                PlayerStats.setInCombat(u, false);
-
-                System.out.println("out of combat");
-
-            }
-        }, 20L * 30L);
-
-        System.out.println("ID = " + id);
-
-    }
 
 }
