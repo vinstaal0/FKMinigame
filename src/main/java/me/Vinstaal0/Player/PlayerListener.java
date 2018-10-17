@@ -1,8 +1,12 @@
 package me.Vinstaal0.Player;
 
+import me.Vinstaal0.Mechanics.ItemMechanics;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -11,6 +15,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import me.Vinstaal0.Minigame;
 import me.Vinstaal0.Mechanics.HealthMechanics;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -68,4 +73,28 @@ public class PlayerListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onPlayerRightClickEquip(PlayerInteractEvent event) {
+        if(event.hasItem() && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+            ItemStack item = event.getItem();
+            if(item.getType() == Material.POTION) { return; }
+            Player p = event.getPlayer();
+
+            if(item.getType() == Material.DIAMOND_HELMET || item.getType() == Material.DIAMOND_CHESTPLATE || item.getType() == Material.DIAMOND_LEGGINGS || item.getType() == Material.DIAMOND_BOOTS || item.getType() == Material.IRON_HELMET || item.getType() == Material.IRON_CHESTPLATE || item.getType() == Material.IRON_LEGGINGS || item.getType() == Material.IRON_BOOTS || item.getType() == Material.CHAINMAIL_HELMET || item.getType() == Material.CHAINMAIL_CHESTPLATE || item.getType() == Material.CHAINMAIL_LEGGINGS || item.getType() == Material.CHAINMAIL_BOOTS || item.getType() == Material.GOLDEN_HELMET || item.getType() == Material.GOLDEN_CHESTPLATE || item.getType() == Material.GOLDEN_LEGGINGS || item.getType() == Material.GOLDEN_BOOTS || item.getType() == Material.LEATHER_HELMET || item.getType() == Material.LEATHER_CHESTPLATE || item.getType() == Material.LEATHER_LEGGINGS || item.getType() == Material.LEATHER_BOOTS) {
+                if(!ItemMechanics.isArmor(item)) {
+                    event.setCancelled(true);
+                    event.setUseItemInHand(Event.Result.DENY);
+                    p.updateInventory();
+                    return;
+                }
+            } else {
+                return;
+            }
+
+            if(p.getInventory().getItem(ItemMechanics.getRespectiveArmorSlot(item)) != null) { return; }
+            event.setCancelled(true);
+            event.setUseItemInHand(Event.Result.DENY);
+            p.updateInventory();
+        }
+    }
 }

@@ -3,6 +3,7 @@ package me.Vinstaal0.Mechanics.Items;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.server.v1_13_R2.Item;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -91,6 +92,8 @@ public class GeneralItem {
         lore.removeAll(lore);
 
         lore.add(dmg);
+
+        System.out.println("Tier = " + ItemMechanics.getTier(item));
 
         Weapon.addRandomStats(lore, ItemMechanics.getTier(item));
 

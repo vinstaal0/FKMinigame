@@ -5,12 +5,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import me.Vinstaal0.Minigame;
 import me.Vinstaal0.Player.PlayerStats;

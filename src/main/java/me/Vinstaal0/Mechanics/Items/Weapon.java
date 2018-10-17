@@ -733,20 +733,8 @@ public class Weapon implements implItem {
 
         for (String line : oldLore) {
             // get hps
-            if (line.contains("HPs") || line.contains("HP REGEN"))
+            if (line.contains("DMG"))
                 newLore.add(1, line);
-
-                // keep after hps
-            else if (line.contains("HP"))
-                newLore.add(0, line);
-
-            else if (line.contains("ENERGY"))
-                newLore.add(1, line);
-
-            else if (line.contains("ARMOR"))
-                newLore.add(2, line);
-
-            else {}
         }
 
         boolean accepted = false;

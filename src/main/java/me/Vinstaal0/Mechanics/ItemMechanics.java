@@ -297,7 +297,7 @@ public class ItemMechanics {
     }
 
     public static boolean isWep(ItemStack item){
-        return (item != null && (item.getType().toString().contains("SWORD") || (item.getType().toString().contains("AXE")) || item.getType().toString().contains("SPADE") || item.getType().toString().contains("HOE") || item.getType().toString().contains("BOW"))) && item.hasItemMeta() && item.getItemMeta().hasLore();
+        return (item != null && (item.getType().toString().contains("SWORD") || (item.getType().toString().contains("AXE")) || item.getType().toString().contains("SHOVEL") || item.getType().toString().contains("HOE") || item.getType().toString().contains("BOW"))) && item.hasItemMeta() && item.getItemMeta().hasLore();
     }
 
     public static Tier getTier(ItemStack item) {
@@ -308,7 +308,7 @@ public class ItemMechanics {
             String name = item.getItemMeta().getDisplayName();
             if (name.contains("Wooden") || name.contains(ChatColor.GRAY.toString()))
                 tier = Tier.ONE;
-            else if (name.contains("Stone") || name.contains(ChatColor.DARK_GREEN.toString()))
+            else if (name.contains("Stone") || name.contains(ChatColor.GREEN.toString()))
                 tier = Tier.TWO;
             else if (name.contains("Steel") || name.contains(ChatColor.AQUA.toString()))
                 tier = Tier.TREE;
@@ -346,7 +346,7 @@ public class ItemMechanics {
 
             if (name.contains(ChatColor.GRAY.toString()))
                 tier = Tier.ONE;
-            else if (name.contains(ChatColor.DARK_GREEN.toString()))
+            else if (name.contains(ChatColor.GREEN.toString()))
                 tier = Tier.TWO;
             else if (name.contains(ChatColor.AQUA.toString()))
                 tier = Tier.TREE;
@@ -370,6 +370,29 @@ public class ItemMechanics {
         }
 
         return tier;
+    }
+
+    public static int getRespectiveArmorSlot(ItemStack item) {
+
+        Material mat = item.getType();
+
+        if (mat == Material.LEATHER_HELMET || mat == Material.CHAINMAIL_HELMET || mat == Material.IRON_HELMET || mat == Material.DIAMOND_HELMET || mat == Material.GOLDEN_HELMET) {
+            return 103;
+        }
+
+        if (mat == Material.LEATHER_CHESTPLATE || mat == Material.CHAINMAIL_CHESTPLATE || mat == Material.IRON_CHESTPLATE || mat == Material.DIAMOND_CHESTPLATE || mat == Material.GOLDEN_CHESTPLATE) {
+            return 102;
+        }
+
+        if (mat == Material.LEATHER_LEGGINGS || mat == Material.CHAINMAIL_LEGGINGS || mat == Material.IRON_LEGGINGS || mat == Material.DIAMOND_LEGGINGS || mat == Material.GOLDEN_LEGGINGS) {
+            return 101;
+        }
+
+        if (mat == Material.LEATHER_BOOTS || mat == Material.CHAINMAIL_BOOTS || mat == Material.IRON_BOOTS || mat == Material.DIAMOND_BOOTS || mat == Material.GOLDEN_BOOTS) {
+            return 100;
+        }
+
+        return 0;
     }
 
 }

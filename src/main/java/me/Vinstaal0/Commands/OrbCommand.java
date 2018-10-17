@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.Vinstaal0.Mechanics.Items.GeneralItem;
+import org.bukkit.inventory.PlayerInventory;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -30,11 +31,28 @@ public class OrbCommand implements CommandExecutor {
 
         ItemStack newItem = g.rerollStats(item);
 
-        System.out.println("rerolled item = " + newItem);
+        PlayerInventory inventory = player.getInventory();
 
-        player.getInventory().remove(item);
+        try {
+            for (int i = 1; i <= 35; i++) {
 
-        player.getInventory().addItem(newItem);
+                boolean match = false;
+
+                if(inventory.getItem(i).getType() != null) {
+                    if(inventory.getItem(i).getType() == item.getType()) {
+                        if(inventory.getItem(i).getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
+                            if(inventory.getItem(i).getItemMeta().getLore().get(0).equalsIgnoreCase(item.getItemMeta().getLore().get(0))) {
+                                match = true;
+                            }
+                        }
+                    }
+                }
+
+                if (match) {
+                    player.getInventory().setItem(i, newItem);
+                }
+            }
+        } catch (NullPointerException ignored) {}
 
         player.updateInventory();
 
