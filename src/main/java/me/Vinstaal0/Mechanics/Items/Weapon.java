@@ -22,11 +22,17 @@ import me.Vinstaal0.Utility.Tier;
 public class Weapon implements implItem {
 
     public enum Type {
-        Sword,
-        Axe,
-        Polearm,
-        Staff,
-        Bow;
+        Sword(1),
+        Axe(2),
+        Polearm(3),
+        Staff(4),
+        Bow(5);
+
+        private final int toInt;
+
+        Type(int toInt) {
+            this.toInt = toInt;
+        }
     }
 
     private ItemStack item;

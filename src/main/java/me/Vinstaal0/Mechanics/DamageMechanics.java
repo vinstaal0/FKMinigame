@@ -1,8 +1,11 @@
 package me.Vinstaal0.Mechanics;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -145,6 +148,44 @@ public class DamageMechanics implements Listener {
                         ChatColor.RED + "-> " + ChatColor.GRAY + "[+" + dps.intValue() + "%DPs -> +" + difference.intValue() +
                         " DMG] " + ChatColor.WHITE + defender.getCustomName() + ChatColor.WHITE + " [" + hp.intValue() + ChatColor.BOLD + "HP" + ChatColor.WHITE + "]");
             }
+
+            try {
+                if (defender.isDead()) {
+
+                    Zombie zombie = null;
+
+                    if (defender instanceof Zombie) {
+                        zombie = (Zombie) defender;
+                    }
+
+                    ItemStack[] armour = zombie.getEquipment().getArmorContents();
+                    ItemStack wep = zombie.getEquipment().getItemInMainHand();
+
+                    // Boots
+                    Location loc = zombie.getLocation();
+                    if (armour[0] != null && armour[0].getType() != Material.AIR) {
+                        loc.getWorld().dropItem(loc, armour[0]);
+                    }
+                    // Leggings
+                    if (armour[1] != null && armour[1].getType() != Material.AIR) {
+                        loc.getWorld().dropItem(loc, armour[1]);
+                    }
+                    // Chestplate
+                    if (armour[2] != null && armour[2].getType() != Material.AIR) {
+                        loc.getWorld().dropItem(loc, armour[2]);
+                    }
+
+                    // Helmet
+                    if (armour[3] != null && armour[3].getType() != Material.AIR) {
+                        loc.getWorld().dropItem(loc, armour[3]);
+                    }
+
+                    if (wep != null && wep.getType() != Material.AIR) {
+                        loc.getWorld().dropItem(loc, wep);
+                    }
+
+                }
+            } catch (Exception e) {e.printStackTrace();}
         }
     }
 }

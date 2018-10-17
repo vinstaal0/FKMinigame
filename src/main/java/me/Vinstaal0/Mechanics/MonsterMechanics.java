@@ -1,7 +1,9 @@
 package me.Vinstaal0.Mechanics;
 
+import me.Vinstaal0.Mechanics.Items.Weapon;
 import me.Vinstaal0.Mechanics.Monsters.Base.FKZombie;
 import me.Vinstaal0.Minigame;
+import me.Vinstaal0.Utility.Rarity;
 import me.Vinstaal0.Utility.Tier;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,9 +25,29 @@ public class MonsterMechanics {
 
     }
 
-    public boolean spawnZombie(Location loc, Tier tier) {
+    public boolean spawnZombie(Location loc) {
         try {
-            new FKZombie(world, loc, tier);
+            new FKZombie(world, loc);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean spawnZombie(Location loc, Tier tier, Rarity rarity) {
+        try {
+            new FKZombie(world, loc, tier, rarity);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean spawnZombie(Location loc, Tier tier, Rarity rarity, int armourType, Weapon.Type weaponType) {
+        try {
+            new FKZombie(world, loc, tier, rarity, armourType, weaponType);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

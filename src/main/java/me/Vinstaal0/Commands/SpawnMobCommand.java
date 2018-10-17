@@ -2,7 +2,10 @@ package me.Vinstaal0.Commands;
 
 import java.util.HashSet;
 
+import me.Vinstaal0.Mechanics.Items.Weapon;
+import me.Vinstaal0.Mechanics.MonsterMechanics;
 import me.Vinstaal0.Utility.EnumHelp;
+import me.Vinstaal0.Utility.Rarity;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -33,10 +36,18 @@ public class SpawnMobCommand implements CommandExecutor {
         Location loc = player.getTargetBlock(null, 200).getLocation();
         Location loc_ = loc.add(0, 1, 0);
 
-        Minigame.monsterMechanics.spawnZombie(loc_, Tier.FOUR);
-
         if (args.length == 0) {
-            Minigame.monsterMechanics.spawnZombie(loc_, null);
+            Minigame.monsterMechanics.spawnZombie(loc_);
+        } else if (args.length == 2){
+            try {
+                Tier tier = Tier.getTier(args[0]);
+                Rarity rarity = Rarity.getRarity(args[1]);
+
+                Minigame.monsterMechanics.spawnZombie(loc_, tier, rarity);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return true;

@@ -5,10 +5,16 @@ import me.Vinstaal0.Mechanics.*;
 import me.Vinstaal0.Player.PlayerListener;
 import me.Vinstaal0.Player.PlayerStats;
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -46,6 +52,17 @@ public class Minigame extends JavaPlugin {
     @Override
     public void onDisable() {
         HealthMechanics.updateHealth();
+
+        Iterator it = HealthMechanics.bbstore.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+
+            BossBar bb = (BossBar) pair.getValue();
+            bb.removePlayer(Bukkit.getPlayer((UUID)pair.getKey()));
+
+        }
+
     }
 
     /**

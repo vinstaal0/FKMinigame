@@ -172,7 +172,7 @@ public class HealthMechanics {
         }
     }
 
-    private static HashMap<UUID, BossBar> bbstore = new HashMap<>();
+    public static HashMap<UUID, BossBar> bbstore = new HashMap<>();
 
     @SuppressWarnings("deprecation")
     public static void updateOverHeadBar(Player player) {
