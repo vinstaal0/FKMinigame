@@ -1,5 +1,6 @@
 package me.Vinstaal0.Mechanics;
 
+import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,7 +10,6 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.Vinstaal0.Minigame;

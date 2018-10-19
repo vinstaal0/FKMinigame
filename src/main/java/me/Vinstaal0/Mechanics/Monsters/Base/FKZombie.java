@@ -1,14 +1,14 @@
 package me.Vinstaal0.Mechanics.Monsters.Base;
 
-import me.Vinstaal0.Mechanics.ItemMechanics;
+import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
 import net.minecraft.server.v1_13_R2.EntityZombie;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import me.Vinstaal0.Mechanics.Items.Armour;
-import me.Vinstaal0.Mechanics.Items.Weapon;
-import me.Vinstaal0.Mechanics.Items.Weapon.Type;
+import me.Vinstaal0.Mechanics.ItemMechanics.Items.Armour;
+import me.Vinstaal0.Mechanics.ItemMechanics.Items.Weapon;
+import me.Vinstaal0.Mechanics.ItemMechanics.Items.Weapon.Type;
 import me.Vinstaal0.Mechanics.Monsters.FKmob;
 import me.Vinstaal0.Utility.EnumHelp;
 import me.Vinstaal0.Utility.Rarity;
@@ -19,7 +19,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.loot.LootTable;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;

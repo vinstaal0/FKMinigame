@@ -1,4 +1,4 @@
-package me.Vinstaal0.Mechanics.Items;
+package me.Vinstaal0.Mechanics.ItemMechanics.Items;
 
 import org.bukkit.inventory.ItemStack;
 

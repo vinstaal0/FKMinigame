@@ -1,4 +1,4 @@
-package me.Vinstaal0.Mechanics;
+package me.Vinstaal0.Mechanics.ItemMechanics;
 
 import java.util.List;
 import java.util.UUID;

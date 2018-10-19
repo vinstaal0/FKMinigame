@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import me.Vinstaal0.Minigame;
-import me.Vinstaal0.Mechanics.Items.Armour;
+import me.Vinstaal0.Mechanics.ItemMechanics.Items.Armour;
 import me.Vinstaal0.Utility.Rarity;
 import me.Vinstaal0.Utility.Tier;
 

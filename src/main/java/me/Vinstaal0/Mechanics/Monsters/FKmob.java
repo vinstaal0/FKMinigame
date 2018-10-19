@@ -1,6 +1,6 @@
 package me.Vinstaal0.Mechanics.Monsters;
 
-import me.Vinstaal0.Mechanics.Items.Weapon;
+import me.Vinstaal0.Mechanics.ItemMechanics.Items.Weapon;
 import me.Vinstaal0.Utility.Rarity;
 import me.Vinstaal0.Utility.Tier;
 

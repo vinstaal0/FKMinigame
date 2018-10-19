@@ -1,4 +1,4 @@
-package me.Vinstaal0.Mechanics.Items.Enchantment;
+package me.Vinstaal0.Mechanics.ItemMechanics.Items.Enchantment;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;

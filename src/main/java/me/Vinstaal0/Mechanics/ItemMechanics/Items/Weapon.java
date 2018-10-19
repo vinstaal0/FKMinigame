@@ -1,4 +1,4 @@
-package me.Vinstaal0.Mechanics.Items;
+package me.Vinstaal0.Mechanics.ItemMechanics.Items;
 
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.Vinstaal0.Mechanics.ItemMechanics;
+import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
 import me.Vinstaal0.Utility.EnumHelp;
 import me.Vinstaal0.Utility.Rarity;
 import me.Vinstaal0.Utility.Tier;

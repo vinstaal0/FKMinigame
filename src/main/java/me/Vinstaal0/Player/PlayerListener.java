@@ -1,6 +1,6 @@
 package me.Vinstaal0.Player;
 
-import me.Vinstaal0.Mechanics.ItemMechanics;
+import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

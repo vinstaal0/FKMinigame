@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import me.Vinstaal0.Minigame;
-import me.Vinstaal0.Mechanics.Items.Armour;
-import me.Vinstaal0.Mechanics.Items.Weapon;
+import me.Vinstaal0.Mechanics.ItemMechanics.Items.Armour;
+import me.Vinstaal0.Mechanics.ItemMechanics.Items.Weapon;
 import me.Vinstaal0.Utility.EnumHelp;
 import me.Vinstaal0.Utility.Tier;
 

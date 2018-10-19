@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.Vinstaal0.Mechanics.Items.GeneralItem;
+import me.Vinstaal0.Mechanics.ItemMechanics.Items.GeneralItem;
 import org.bukkit.inventory.PlayerInventory;
 
 /**
