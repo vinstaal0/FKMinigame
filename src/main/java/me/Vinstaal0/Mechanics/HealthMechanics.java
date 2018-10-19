@@ -105,10 +105,6 @@ public class HealthMechanics {
                 int regen = PlayerStats.getMaxHPs(player.getUniqueId());
                 Double currentHP = player.getHealth() + regen;
 
-                player.sendMessage(ChatColor.GREEN + "Regen +" + ChatColor.BOLD + "" + regen);
-
-                System.out.println("Player " + player.getName() + " GENERIC MAX HEALTH = " + player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-
                 try {
                     if (currentHP > player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
                         player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
@@ -185,8 +181,6 @@ public class HealthMechanics {
         if (player != null) {
             Double maxHP = PlayerStats.getMaxHP(player.getUniqueId());
             Double currentHP = player.getHealth();
-
-            player.sendMessage(ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue());
 
             if (!bbstore.containsKey(player.getUniqueId())) {
                 BossBar bar = Bukkit.createBossBar(ChatColor.BOLD + "" + ChatColor.GREEN + "HP: " + currentHP.intValue() + "/" + maxHP.intValue(), BarColor.RED, BarStyle.SEGMENTED_10);

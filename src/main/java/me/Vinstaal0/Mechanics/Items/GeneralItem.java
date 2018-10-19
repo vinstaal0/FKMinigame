@@ -3,19 +3,31 @@ package me.Vinstaal0.Mechanics.Items;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.Vinstaal0.Mechanics.Items.Enchantment.Glow;
+import me.Vinstaal0.Minigame;
 import net.minecraft.server.v1_13_R2.Item;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.Vinstaal0.Mechanics.ItemMechanics;
 import me.Vinstaal0.Utility.Rarity;
+import org.bukkit.plugin.Plugin;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
  */
 public class GeneralItem {
+
+    static Plugin plugin = null;
+
+    public GeneralItem() {}
+
+    public GeneralItem(Minigame plugin) {
+        this.plugin = plugin;
+    }
 
     public boolean addRarity(List<String> lore, Rarity rarity) {
 
@@ -276,6 +288,12 @@ public class GeneralItem {
             test.append(ChatColor.RED + "[" + display + "] ");
 
             test.append(subString);
+
+            if (level >= 3) {
+
+                Glow glow = new Glow(new NamespacedKey(this.plugin, "fallingkingdom"));
+                im.addEnchant(glow, 1, true);
+            }
 
 //			sb.append(" [" + display + "]");
 

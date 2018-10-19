@@ -9,6 +9,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.Vinstaal0.Minigame;
@@ -57,21 +58,39 @@ public class DamageMechanics implements Listener {
 
             Double armor = 1 + Math.random() * (PlayerStats.getMaxArmor(defender.getUniqueId()) - 1 );
 
-            Double dmg = rawDmg * ((100 - armor) / 100);
+            long dmg = Math.round(rawDmg * ((100 - armor) / 100));
 
-            Double difference = rawDmg - dmg;
+            long difference = Math.round(rawDmg) - dmg;
+
+            Long finalDmg = 1L;
 
             if (dmg == 0) {
-                dmg = 1.0;
-                difference = 1.0;
+                dmg = 1L;
+            } else {
+                finalDmg = dmg;
             }
+
+            System.out.println("Final DMG = " + finalDmg + " DMG = " + dmg + " int value = " + finalDmg.intValue());
+            System.out.println("Defender HP = " + defender.getHealth());
+            System.out.println("Bukkit final DMG = " + event.getFinalDamage());
+
+            Long finalDifference = difference;
 
             HealthMechanics.updateHealth(defender);
 
             if ((PlayerStats.getMaxHP(defender.getUniqueId()) - dmg) < 0) {
                 defender.damage(defender.getHealth());
             } else {
-                defender.damage(dmg);
+
+                try {
+                    defender.setHealth((defender.getHealth() - finalDmg));
+                } catch (IllegalArgumentException ignored) {
+                    ignored.printStackTrace();
+                    defender.damage(defender.getHealth());
+                }
+                event.setDamage(1.0);
+                System.out.println("------------------------");
+                System.out.println("Bukkit final DMG = " + event.getFinalDamage());
             }
 
             HealthMechanics.updateHealth(defender);
@@ -79,8 +98,8 @@ public class DamageMechanics implements Listener {
             Double hp = Double.valueOf(defender.getHealth());
 
             if (true) {
-                defender.sendMessage(ChatColor.RED + "     -" + dmg.intValue() + ChatColor.BOLD + "HP" +
-                        ChatColor.RED + "-> " + ChatColor.GRAY + "[-" + armor.intValue() + "%Armor -> -" + difference.intValue() +
+                defender.sendMessage(ChatColor.RED + "     -" + finalDmg.intValue() + ChatColor.BOLD + "HP" +
+                        ChatColor.RED + "-> " + ChatColor.GRAY + "[-" + armor.intValue() + "%Armor -> -" + finalDifference.intValue() +
                         " DMG] " + ChatColor.GREEN + "[" + hp.intValue() + ChatColor.BOLD + "HP" + ChatColor.GREEN + "]");
             }
 
@@ -106,7 +125,6 @@ public class DamageMechanics implements Listener {
 
             System.out.println(attacker.getName() + " is now in combat!");
 
-//            PlayerStats.inCombat(attacker.getUniqueId());
         }
 
         if (defender != null || attacker != null) {
@@ -122,21 +140,39 @@ public class DamageMechanics implements Listener {
 
             Double dps = 1 + Math.random() * (PlayerStats.getMaxDPs(attacker.getUniqueId()) - 1);
 
-            Double dmg = rawDmg * ((dps / 100) + 1);
+            long dmg = Math.round(rawDmg * ((dps / 100) + 1));
 
-            Double difference = dmg - rawDmg;
-
-            if (dmg == 0) {
-                dmg = 1.0;
-                difference = 1.0;
-            }
+            long difference = dmg - Math.round(rawDmg);
 
             HealthMechanics.updateHealth(attacker);
+
+            Long finalDmg = 1L;
+
+            if (dmg == 0) {
+                finalDmg = 1L;
+            } else {
+                finalDmg = dmg;
+            }
+
+            System.out.println("Final DMG = " + finalDmg + " DMG = " + dmg + " int value = " + finalDmg.intValue());
+            System.out.println("Defender HP = " + defender.getHealth());
+            System.out.println("Bukkit final DMG = " + event.getFinalDamage());
+
+            Long finalDifference = difference;
 
             if ((defender.getMaxHealth() - dmg) < 0) {
                 defender.damage(defender.getHealth());
             } else {
-                defender.damage(dmg);
+//                event.setDamage(EntityDamageEvent.DamageModifier.BASE, finalDmg.intValue());
+                try {
+                    defender.setHealth((defender.getHealth() - finalDmg + event.getFinalDamage()));
+                } catch (IllegalArgumentException ignored) {
+                    // Defender is dead
+                    defender.damage(defender.getHealth());
+                }
+                event.setDamage(1.0);
+                System.out.println("------------------------");
+                System.out.println("Bukkit final DMG = " + event.getFinalDamage());
             }
 
             HealthMechanics.updateHealth(attacker);
@@ -144,8 +180,8 @@ public class DamageMechanics implements Listener {
             Double hp = Double.valueOf(defender.getHealth());
 
             if (true) {
-                attacker.sendMessage(ChatColor.RED + "     " + dmg.intValue() + ChatColor.BOLD + " DMG" +
-                        ChatColor.RED + "-> " + ChatColor.GRAY + "[+" + dps.intValue() + "%DPs -> +" + difference.intValue() +
+                attacker.sendMessage(ChatColor.RED + "     " + finalDmg.intValue() + ChatColor.BOLD + " DMG" +
+                        ChatColor.RED + "-> " + ChatColor.GRAY + "[+" + dps.intValue() + "%DPs -> +" + finalDifference.intValue() +
                         " DMG] " + ChatColor.WHITE + defender.getCustomName() + ChatColor.WHITE + " [" + hp.intValue() + ChatColor.BOLD + "HP" + ChatColor.WHITE + "]");
             }
 

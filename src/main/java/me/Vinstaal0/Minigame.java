@@ -2,15 +2,20 @@ package me.Vinstaal0;
 
 import me.Vinstaal0.Commands.*;
 import me.Vinstaal0.Mechanics.*;
+import me.Vinstaal0.Mechanics.Items.Enchantment.Glow;
+import me.Vinstaal0.Mechanics.Items.GeneralItem;
 import me.Vinstaal0.Player.PlayerListener;
 import me.Vinstaal0.Player.PlayerStats;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BossBar;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -44,8 +49,11 @@ public class Minigame extends JavaPlugin {
         new DamageMechanics(this);
         new ChatMechanics(this);
         new HealthMechanics(this);
+        new GeneralItem(this);
 
         monsterMechanics = new MonsterMechanics(this);
+
+        registerGlow();
 
     }
 
@@ -77,5 +85,23 @@ public class Minigame extends JavaPlugin {
      */
     public static void setPlugin(Plugin plugin) {
         Minigame.plugin = plugin;
+    }
+
+    public void registerGlow() {
+        try {
+            Field f = Enchantment.class.getDeclaredField("acceptingNew");
+            f.setAccessible(true);
+            f.set(null, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Glow glow = new Glow(new NamespacedKey(this, "fallingkingdom"));
+            Enchantment.registerEnchantment(glow);
+        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
