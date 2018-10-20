@@ -57,6 +57,12 @@ public class GeneralItem {
 
     }
 
+    public ItemStack removeAttributes(ItemStack itemstack) {
+
+
+        return null;
+    }
+
     public ItemStack rerollStats(ItemStack item) {
 
         if (ItemMechanics.isArmor(item) || ItemMechanics.isWep(item)) {
@@ -135,7 +141,6 @@ public class GeneralItem {
         return lore;
 
     }
-
 
     public ItemStack enchant(Player player, ItemStack item) {
 
