@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import me.Vinstaal0.Mechanics.ItemMechanics.Durability;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -192,7 +193,7 @@ public class Weapon implements implItem {
 
         this.im = item.getItemMeta();
 
-        Boolean accepted = false;
+        Boolean accepted;
 
         accepted = addDmg(item, tier, rarity, type);
         if (accepted == false) {System.out.println("Item error");}
@@ -203,6 +204,9 @@ public class Weapon implements implItem {
         GeneralItem g = new GeneralItem();
 
         accepted = g.addRarity(lore, rarity);
+        if (accepted == false) {System.out.println("Item error");}
+
+        accepted = g.addCustomDurability(lore, tier);
         if (accepted == false) {System.out.println("Item error");}
 
         this.im.setDisplayName(this.name);
@@ -757,7 +761,10 @@ public class Weapon implements implItem {
      * @return the item
      */
     public ItemStack getItem() {
-        return item;
+
+        ItemStack newItem = GeneralItem.removeAttributes(this.item);
+
+        return newItem;
     }
 
     /**

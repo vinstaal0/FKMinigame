@@ -274,21 +274,19 @@ public class ItemMechanics {
 
     public static boolean hasEnergy(ItemStack item) {
 
-        boolean hasEnergy = false;
-
         if (item.hasItemMeta()) {
 
             List<String> lore = item.getItemMeta().getLore();
 
             for (String line : lore) {
                 if (line.contains("energy")) {
-                    hasEnergy = true;
+                    return true;
                 }
             }
 
         }
 
-        return hasEnergy;
+        return false;
     }
 
     public static boolean isArmor(ItemStack item) {

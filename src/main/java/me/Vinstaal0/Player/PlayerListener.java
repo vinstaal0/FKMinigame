@@ -1,7 +1,10 @@
 package me.Vinstaal0.Player;
 
+import me.Vinstaal0.Mechanics.ItemMechanics.Durability;
 import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -10,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -91,10 +95,35 @@ public class PlayerListener implements Listener {
                 return;
             }
 
-            if(p.getInventory().getItem(ItemMechanics.getRespectiveArmorSlot(item)) != null) { return; }
+            if(p.getInventory().getItem(ItemMechanics.getRespectiveArmorSlot(item)) != null) {
+                return;
+            }
             event.setCancelled(true);
             event.setUseItemInHand(Event.Result.DENY);
             p.updateInventory();
         }
+    }
+
+    @EventHandler
+    public void onItemDamageEvent(PlayerItemDamageEvent event) {
+
+        Player player = event.getPlayer();
+        ItemStack item = event.getItem();
+        player.sendMessage(ChatColor.DARK_PURPLE + "TRIGGER");
+
+        if (!Durability.hasCustomDurability(item)) {
+            return;
+        }
+
+        try {
+            Durability.damageItem(player, item, 1);
+        } catch (IndexOutOfBoundsException e) {
+            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+            player.sendMessage("Your " + item.getItemMeta().getDisplayName() + " broke!");
+            event.setDamage(item.getType().getMaxDurability());
+        }
+
+        HealthMechanics.updateHealth(player);
+
     }
 }

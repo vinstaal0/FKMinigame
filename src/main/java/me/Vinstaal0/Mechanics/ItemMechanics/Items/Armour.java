@@ -183,6 +183,9 @@ public class Armour implements implItem {
         accepted = g.addRarity(lore, rarity);
         if (accepted == false) {System.out.println("Item error");}
 
+        accepted = g.addCustomDurability(lore, tier);
+        if (accepted == false) {System.out.println("Item error");}
+
         this.im.setDisplayName(this.name);
 
         this.im.setLore(this.lore);
@@ -740,7 +743,10 @@ public class Armour implements implItem {
      * @return the item
      */
     public ItemStack getItem() {
-        return item;
+
+        ItemStack newItem = GeneralItem.removeAttributes(this.item);
+
+        return newItem;
     }
 
     /**

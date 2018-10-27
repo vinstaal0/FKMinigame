@@ -2,6 +2,7 @@ package me.Vinstaal0;
 
 import me.Vinstaal0.Commands.*;
 import me.Vinstaal0.Mechanics.*;
+import me.Vinstaal0.Mechanics.ItemMechanics.Durability;
 import me.Vinstaal0.Mechanics.ItemMechanics.Items.Enchantment.Glow;
 import me.Vinstaal0.Mechanics.ItemMechanics.Items.GeneralItem;
 import me.Vinstaal0.Player.PlayerListener;
@@ -47,6 +48,7 @@ public class Minigame extends JavaPlugin {
         new ChatMechanics(this);
         new HealthMechanics(this);
         new GeneralItem(this);
+        new Durability(this);
 
         monsterMechanics = new MonsterMechanics(this);
 

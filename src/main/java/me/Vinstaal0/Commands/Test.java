@@ -1,12 +1,15 @@
 package me.Vinstaal0.Commands;
 
 
+import me.Vinstaal0.Mechanics.ItemMechanics.Durability;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.Vinstaal0.Mechanics.HealthMechanics;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -22,18 +25,21 @@ public class Test implements CommandExecutor {
             player = (Player) sender;
         }
 
-        int dmg = 0;
+        int damage = 10;
+
+        if (args.length > 0) {
+            damage = Integer.valueOf(args[0]);
+        }
+
+        ItemStack item = player.getInventory().getItemInMainHand();
 
         try {
-            dmg = Integer.parseInt(args[0]);
-        } catch (Exception ignored) {
+            Durability.damageItem(player, item, damage);
+        } catch (IndexOutOfBoundsException e) {
+            player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+            player.sendMessage(item.getItemMeta().getLore().toString());
         }
-
-        if (dmg > 0) {
-            player.damage(dmg);
-        }
-
-        HealthMechanics.updateHealth(player);
 
         return true;
     }

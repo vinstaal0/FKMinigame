@@ -3,10 +3,19 @@ package me.Vinstaal0.Mechanics.ItemMechanics.Items;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import me.Vinstaal0.Mechanics.ItemMechanics.Items.Enchantment.Glow;
 import me.Vinstaal0.Minigame;
+import me.Vinstaal0.Utility.Tier;
+import net.minecraft.server.v1_13_R2.AttributeModifier;
+import net.minecraft.server.v1_13_R2.GenericAttributes;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.NBTTagList;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,6 +23,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
 import me.Vinstaal0.Utility.Rarity;
 import org.bukkit.plugin.Plugin;
+
+import static me.Vinstaal0.Mechanics.ItemMechanics.Durability.getMaxDurability;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -57,10 +68,27 @@ public class GeneralItem {
 
     }
 
-    public ItemStack removeAttributes(ItemStack itemstack) {
-
-
-        return null;
+    public static ItemStack removeAttributes(ItemStack item) {
+        if(item == null) {
+            return item;
+        }
+        if(item.getType() == Material.WRITABLE_BOOK) {
+            return item;
+        }
+        ItemStack i = item.clone();
+        net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
+        NBTTagCompound tag;
+        if (!nmsStack.hasTag()){
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        }
+        else {
+            tag = nmsStack.getTag();
+        }
+        NBTTagList am = new NBTTagList();
+        tag.set("AttributeModifiers", am);
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
     }
 
     public ItemStack rerollStats(ItemStack item) {
@@ -104,17 +132,27 @@ public class GeneralItem {
 
         String dmg = lore.get(0);
 
-        String rarity = lore.get(lore.size() - 1);
+        String rarity = "";
+
+        for (String line : lore) {
+
+            if (line.contains("Common") || line.contains("Uncommon") || line.contains("Rare") || line.contains("Unique") || line.contains("Ancient")) {
+                rarity = line;
+            }
+        }
+
+        String durability = lore.get(lore.size() - 1);
 
         lore.removeAll(lore);
 
         lore.add(dmg);
 
-        System.out.println("Tier = " + ItemMechanics.getTier(item));
-
         Weapon.addRandomStats(lore, ItemMechanics.getTier(item));
 
         lore.add(rarity);
+        lore.add(durability);
+
+        System.out.println("Lore " + lore);
 
         return lore;
 
@@ -315,6 +353,17 @@ public class GeneralItem {
         item.setItemMeta(im);
 
         return item;
+    }
+
+    public boolean addCustomDurability(List<String> lore, Tier tier) {
+
+        try {
+            lore.add(ChatColor.GRAY + "Durability: " + getMaxDurability(tier) + "/" + getMaxDurability(tier));
+            return  true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

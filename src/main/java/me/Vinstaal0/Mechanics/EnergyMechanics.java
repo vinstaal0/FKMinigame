@@ -362,7 +362,14 @@ public class EnergyMechanics implements Listener {
             attacker = (Player) event.getDamager();
         }
 
-        ItemStack weapon = attacker.getEquipment().getItemInMainHand();
+        ItemStack weapon;
+
+        try {
+            weapon = attacker.getEquipment().getItemInMainHand();
+        } catch (NullPointerException e) {
+            weapon = new ItemStack(Material.AIR);
+        }
+
 
         float energyCost = getEnergyCost(weapon);
 
