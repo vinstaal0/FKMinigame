@@ -35,6 +35,9 @@ public class FKZombie extends EntityZombie implements FKmob {
     private ItemStack leggings = null;
     private ItemStack boots = null;
 
+    private Tier tier;
+    private Rarity rarity;
+
     private final ItemStack weapon = null;
 
     public FKZombie (World world, Location loc) {
@@ -68,6 +71,9 @@ public class FKZombie extends EntityZombie implements FKmob {
     public FKZombie (World world, Location loc, Tier tier, Rarity rarity) {
         super(((CraftWorld)world).getHandle());
 
+        this.tier = tier;
+        this.rarity = rarity;
+
         Entity mob = world.spawnEntity(loc, EntityType.ZOMBIE);
 
         if (mob instanceof Zombie) {
@@ -89,6 +95,9 @@ public class FKZombie extends EntityZombie implements FKmob {
 
     public FKZombie (World world, Location loc, Tier tier, Rarity rarity, int armourType, Weapon.Type weaponType) {
         super(((CraftWorld)world).getHandle());
+
+        this.tier = tier;
+        this.rarity = rarity;
 
         Entity mob = world.spawnEntity(loc, EntityType.ZOMBIE);
 
@@ -367,6 +376,26 @@ public class FKZombie extends EntityZombie implements FKmob {
 
         ItemStack[] armour = {this.helmet, this.chestPlate, this.leggings, this.boots};
 
+        int[] base = {5, 350, 4075, 16000, 75000};
+
+        int[] low = {53, 280, 900, 3000, 7000};
+        int[] high = {77, 450, 1425, 5000, 11000};
+
+        double[] armStr = {1, 1.05, 1.1, 1.15, 1.25};
+
+        double[] multiT5 = {1, 1.25, 1.5, 1.8, 2.15};
+
+        int tier = this.tier.toInt();
+        int rarity = this.rarity.toInt();
+
+        double hpLow = Math.ceil((base[tier-1] + rarity * low[tier-1]) * armStr[tier-1]);
+        double hpHigh = Math.ceil((base[tier-1] + rarity * high[tier-1]) * armStr[tier-1]);
+
+        if (this.tier == Tier.FIVE) {
+            hpLow *= multiT5[rarity-1];
+            hpHigh *= multiT5[rarity-1];
+        }
+
         for (ItemStack armourPiece : armour) {
 
             System.out.println("armourpieces " + armourPiece);
@@ -422,8 +451,75 @@ public class FKZombie extends EntityZombie implements FKmob {
             }
         }
 
-        setHealth(hp);
+        double addition = hpLow + Math.random() * (hpHigh - hpLow);
+
+        setHealth(hp + addition);
     }
+
+//    public void setHealth() {
+//        Double hp = 100.0;
+//
+//        System.out.println("Setting HP");
+//
+//        ItemStack[] armour = {this.helmet, this.chestPlate, this.leggings, this.boots};
+//
+//        for (ItemStack armourPiece : armour) {
+//
+//            System.out.println("armourpieces " + armourPiece);
+//
+//            if (ItemMechanics.isArmor(armourPiece)) {
+//                List<String> lore = armourPiece.getItemMeta().getLore();
+//
+//                System.out.println("Lore " + lore);
+//
+//                for (String line : lore) {
+//                    // get hps
+//                    if (line.contains("HPs") || line.contains("HP REGEN")) {
+//
+//                        // keep after hps
+//                    } else if (line.contains("HP")) {
+//
+//                        System.out.println("Piece = " + armourPiece);
+//                        System.out.println("HP = " + hp.intValue());
+//                        System.out.println("Adding = " + ItemMechanics.getStat(armourPiece, lore.indexOf(line)));
+//                        hp += ItemMechanics.getStat(armourPiece, lore.indexOf(line));
+//                        System.out.println("HP = " + hp.intValue());
+//
+//                    } else if (line.contains("ENERGY")) {
+//
+//                    } else if (line.contains("ARMOR")) {
+//
+//                    } else if (line.contains("DPs")) {
+//
+//                    } else if (line.contains("INT")) {
+//
+//                    } else if (line.contains("VIT")) {
+//
+//                    } else if (line.contains("DEX")) {
+//
+//                    } else if (line.contains("STR")) {
+//
+//                    } else if (line.contains("DODGE")) {
+//
+//                    } else if (line.contains("BLOCK")) {
+//
+//                    } else if (line.contains("REFLECT")) {
+//
+//                    } else if (line.contains("RESISTANCE")) {
+//
+//                    } else if (line.contains("THORNS")) {
+//
+//                    } else if (line.contains("GEM FIND")) {
+//
+//                    } else if (line.contains("ITEM FIND")) {
+//
+//                    } else {}
+//                }
+//            }
+//        }
+//
+//        setHealth(hp);
+//    }
 
     public void setHealth(Double hp) {
         zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);

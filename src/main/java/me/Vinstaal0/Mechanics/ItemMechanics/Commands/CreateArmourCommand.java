@@ -1,4 +1,4 @@
-package me.Vinstaal0.Commands;
+package me.Vinstaal0.Mechanics.ItemMechanics.Commands;
 
 
 import java.util.HashMap;

@@ -33,3 +33,12 @@ commands:
   enchant:
     description: enchants the item
     usage: /enchant
+  createorb:
+    description: creates an orb of alteration
+    usage: /createorb amount
+  createenchant:
+    descrption: creates and enchant
+    usage: /createenchant tier amount
+  createscrap:
+    description: creates scraps
+    usage: /createscrap tier amount

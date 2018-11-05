@@ -1,19 +1,36 @@
 package me.Vinstaal0.Mechanics.Monsters;
 
+import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
 import me.Vinstaal0.Mechanics.ItemMechanics.Items.Weapon;
 import me.Vinstaal0.Utility.Rarity;
 import me.Vinstaal0.Utility.Tier;
+import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
  */
 public interface FKmob {
 
-    public void giveArmour();
+    Zombie zombie = null;
 
-    public void giveArmour(Tier tier);
+    ItemStack helmet = null;
+    ItemStack chestPlate = null;
+    ItemStack leggings = null;
+    ItemStack boots = null;
 
-    public void giveArmour(Rarity rarity);
+    Tier tier = null;
+    Rarity rarity = null;
+
+    ItemStack weapon = null;
+
+    void giveArmour();
+
+    void giveArmour(Tier tier);
+
+    void giveArmour(Rarity rarity);
 
     /*
      * 1 = Nothing
@@ -25,11 +42,11 @@ public interface FKmob {
      * 7 = chest and boots
      * 8 = chest, legs and boots
      */
-    public void giveArmour(int type);
+    void giveArmour(int type);
 
-    public void giveArmour(Tier tier, Rarity rarity);
+    void giveArmour(Tier tier, Rarity rarity);
 
-    public void giveArmour(Tier tier, Rarity rarity, int type);
+    void giveArmour(Tier tier, Rarity rarity, int type);
 
     public void giveArmourRandom(Tier tier, int type);
 
@@ -49,7 +66,7 @@ public interface FKmob {
 
     public void setName(Tier tier, Rarity rarity);
 
-    public void setHealth();
+    void setHealth();
 
     public void setHealth(Double hp);
 
