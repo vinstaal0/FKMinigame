@@ -35,8 +35,15 @@ public class ChatMechanics implements Listener {
 
         for (Player p : event.getRecipients()) {
 
+            int i = 0;
+
             if (p.getLocation().distanceSquared(loc) < 400) {
                 p.sendMessage(message);
+                i++;
+            }
+
+            if (i == 0) {
+                player.sendMessage("Nobody can hear you ...");
             }
         }
     }

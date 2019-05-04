@@ -1,5 +1,6 @@
 package me.Vinstaal0.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,7 +38,9 @@ public class GLCommand implements CommandExecutor {
             msg += s + " ";
         }
 
-        player.sendMessage(ChatColor.AQUA + "<" + ChatColor.BOLD + "G" + ChatColor.AQUA + "> " + ChatColor.GRAY + prefix + ChatColor.GRAY + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + msg);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage(ChatColor.AQUA + "<" + ChatColor.BOLD + "G" + ChatColor.AQUA + "> " + ChatColor.GRAY + prefix + ChatColor.GRAY + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + msg);
+        }
 
         return true;
     }

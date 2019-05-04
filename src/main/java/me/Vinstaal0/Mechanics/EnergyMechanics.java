@@ -69,7 +69,7 @@ public class EnergyMechanics implements Listener {
             public void run() {
                 replenishEnergy();
             }
-        }.runTaskTimerAsynchronously(plugin, 2 * 20L, 3L);
+        }.runTaskTimerAsynchronously(plugin, 2 * 20L, 2L);
 
         // Handles the 2 second 'delay' when you run out of energy.
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {

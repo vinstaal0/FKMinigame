@@ -1,5 +1,6 @@
 package me.Vinstaal0.Player;
 
+import me.Vinstaal0.Mechanics.ItemMechanics.ArmourEquip.ArmourEquipEvent;
 import me.Vinstaal0.Mechanics.ItemMechanics.Durability;
 import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
 import org.bukkit.ChatColor;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
@@ -59,9 +61,13 @@ public class PlayerListener implements Listener {
             player = (Player) event.getWhoClicked();
 
             HealthMechanics.updateHealth(player);
-
-            HealthMechanics.updateHealth(player);
         }
+    }
+
+    @EventHandler
+    public void onPlayerArmourEquip(ArmourEquipEvent event) {
+
+        HealthMechanics.updateHealth(event.getPlayer());
     }
 
     @EventHandler
@@ -126,4 +132,5 @@ public class PlayerListener implements Listener {
         HealthMechanics.updateHealth(player);
 
     }
+
 }

@@ -2,6 +2,10 @@ package me.Vinstaal0;
 
 import me.Vinstaal0.Commands.*;
 import me.Vinstaal0.Mechanics.*;
+import me.Vinstaal0.Mechanics.ItemMechanics.ArmourEquip.ArmourListener;
+import me.Vinstaal0.Mechanics.ItemMechanics.Commands.CreateArmourCommand;
+import me.Vinstaal0.Mechanics.ItemMechanics.Commands.CreateSetCommand;
+import me.Vinstaal0.Mechanics.ItemMechanics.Commands.CreateWeaponCommand;
 import me.Vinstaal0.Mechanics.ItemMechanics.Durability;
 import me.Vinstaal0.Mechanics.ItemMechanics.Items.Enchantment.Glow;
 import me.Vinstaal0.Mechanics.ItemMechanics.Items.GeneralItem;
@@ -10,14 +14,13 @@ import me.Vinstaal0.Player.PlayerStats;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BossBar;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -29,6 +32,9 @@ public class Minigame extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        getServer().getPluginManager().registerEvents(new ArmourListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         this.getCommand("createarmour").setExecutor(new CreateArmourCommand());
         this.getCommand("createweapon").setExecutor(new CreateWeaponCommand());
@@ -42,7 +48,7 @@ public class Minigame extends JavaPlugin {
         this.getCommand("enchant").setExecutor(new EnchantCommand());
 
         new PlayerStats(this);
-        new PlayerListener(this);
+//        new PlayerListener(this);
         new EnergyMechanics(this);
         new DamageMechanics(this);
         new ChatMechanics(this);
@@ -60,15 +66,17 @@ public class Minigame extends JavaPlugin {
     public void onDisable() {
         HealthMechanics.updateHealth();
 
-        Iterator it = HealthMechanics.bbstore.entrySet().iterator();
+        try {
+            Iterator it = HealthMechanics.bbstore.entrySet().iterator();
 
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
 
-            BossBar bb = (BossBar) pair.getValue();
-            bb.removePlayer(Bukkit.getPlayer((UUID)pair.getKey()));
+                BossBar bb = (BossBar) pair.getValue();
+                bb.removePlayer(Bukkit.getPlayer((UUID)pair.getKey()));
 
-        }
+            }
+        } catch (NullPointerException ignored) {}
 
     }
 

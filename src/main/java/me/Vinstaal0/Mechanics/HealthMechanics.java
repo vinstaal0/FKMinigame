@@ -38,6 +38,13 @@ public class HealthMechanics {
         Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
+                updateHealth();
+            }
+        }, 1L, 1L);
+
+        Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
 
                 for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 
@@ -131,7 +138,7 @@ public class HealthMechanics {
 
     public static void updateHealth(Player player) {
 
-        ArrayList<Tier> tier = getStats(player);
+        getStats(player);
 
         Double maxHP = PlayerStats.getMaxHP(player.getUniqueId());
 
@@ -149,9 +156,9 @@ public class HealthMechanics {
             actualCurrentHP = maxHP.intValue();
         }
 
-        refreshHealth(player);
-
 //		PlayerStats.setCurrentHP(player.getUniqueId(), actualCurrentHP);
+
+        refreshHealth(player);
 
     }
 
