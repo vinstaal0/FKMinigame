@@ -4,16 +4,20 @@ import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.Vinstaal0.Minigame;
 import me.Vinstaal0.Player.PlayerStats;
+
+import java.util.Random;
 
 /**
  * Created by Vinstaal0 on 15-10-2018.
@@ -24,110 +28,85 @@ public class DamageMechanics implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    // TODO rework calculating damage, doesn't calculate correctly (DMG and Display is not the same)
-
     @SuppressWarnings("deprecation")
     @EventHandler
     public void playerDMG(EntityDamageByEntityEvent event) {
 
-        Player defender = null;
-
-        if (event.getEntity() instanceof Player) {
-            defender = (Player) event.getEntity();
+        if (event.getEntity() instanceof Player && event.getDamager() instanceof Creature) {
+            Player defender = (Player) event.getEntity();
+            Creature attacker = (Creature) event.getDamager();
 
             HealthMechanics.in_combat.put(defender.getName(), System.currentTimeMillis());
 
             System.out.println(defender.getName() + " is now in combat!");
-        }
-        Creature attacker = null;
 
-        if (event.getDamager() instanceof Creature) {
-            attacker = (Creature) event.getDamager();
-        }
+            if (defender != null || attacker != null) {
+                ItemStack weapon = null;
 
-        if (defender != null || attacker != null) {
-            ItemStack weapon = null;
+                if (attacker.getEquipment().getItemInHand() != null) {
+                    weapon = attacker.getEquipment().getItemInHand();
+                }
 
-            if (attacker.getEquipment().getItemInHand() != null) {
-                weapon = attacker.getEquipment().getItemInHand();
-            }
+                int[] stat = ItemMechanics.getDamage(weapon);
 
-            int[] stat = ItemMechanics.getDamage(weapon);
+                int min_dmg = stat[0];
+                int max_dmg = stat[1];
 
-            Double rawDmg = stat[0] + Math.random() * (stat[1] - stat[0]);
-
-            Double armor = 1 + Math.random() * (PlayerStats.getMaxArmor(defender.getUniqueId()) - 1 );
-
-            long dmg = Math.round(rawDmg * ((100 - armor) / 100));
-
-            long difference = Math.round(rawDmg) - dmg;
-
-            Long finalDmg = 1L;
-
-            if (dmg == 0) {
-                dmg = 1L;
-            } else {
-                finalDmg = dmg;
-            }
-
-            System.out.println("Final DMG = " + finalDmg + " DMG = " + dmg + " int value = " + finalDmg.intValue());
-            System.out.println("Defender HP = " + defender.getHealth());
-            System.out.println("Bukkit final DMG = " + event.getFinalDamage());
-
-            Long finalDifference = difference;
-
-            HealthMechanics.updateHealth(defender);
-
-            if ((PlayerStats.getMaxHP(defender.getUniqueId()) - dmg) < 0) {
-                defender.damage(defender.getHealth());
-            } else {
+                int rawDmg = 1;
 
                 try {
-                    defender.setHealth((defender.getHealth() - finalDmg));
-                } catch (IllegalArgumentException ignored) {
-                    ignored.printStackTrace();
+                    rawDmg = new Random().nextInt(max_dmg - min_dmg) + min_dmg;
+                } catch (IllegalArgumentException ignored) {}
+
+                Double armor = 1 + Math.random() * (PlayerStats.getMaxArmor(defender.getUniqueId()) - 1 );
+
+                int dmg = (int) Math.round(rawDmg * ((100 - armor) / 100));
+
+                int difference = rawDmg - dmg;
+
+                HealthMechanics.updateHealth(defender);
+
+                defender.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(0);
+
+                if ((PlayerStats.getMaxHP(defender.getUniqueId()) - dmg) < 0) {
                     defender.damage(defender.getHealth());
+                } else {
+
+                    try {
+                        defender.setHealth((defender.getHealth() - dmg));
+                    } catch (IllegalArgumentException ignored) {
+                        ignored.printStackTrace();
+                        defender.damage(defender.getHealth());
+                    }
+
+                    event.setDamage(0);
                 }
-                event.setDamage(1.0);
-                System.out.println("------------------------");
-                System.out.println("Bukkit final DMG = " + event.getFinalDamage());
+
+                HealthMechanics.updateHealth(defender);
+
+                Double hp = Double.valueOf(defender.getHealth());
+
+                if (true) {
+                    defender.sendMessage(ChatColor.RED + "     -" + dmg + ChatColor.BOLD + "HP" +
+                            ChatColor.RED + "-> " + ChatColor.GRAY + "[-" + armor.intValue() + "%Armor -> -" + difference +
+                            " DMG] " + ChatColor.GREEN + "[" + hp.intValue() + ChatColor.BOLD + "HP" + ChatColor.GREEN + "]");
+                }
             }
-
-            HealthMechanics.updateHealth(defender);
-
-            Double hp = Double.valueOf(defender.getHealth());
-
-            if (true) {
-                defender.sendMessage(ChatColor.RED + "     -" + finalDmg.intValue() + ChatColor.BOLD + "HP" +
-                        ChatColor.RED + "-> " + ChatColor.GRAY + "[-" + armor.intValue() + "%Armor -> -" + finalDifference.intValue() +
-                        " DMG] " + ChatColor.GREEN + "[" + hp.intValue() + ChatColor.BOLD + "HP" + ChatColor.GREEN + "]");
-            }
-
         }
-
     }
 
     @SuppressWarnings("deprecation")
     @EventHandler
     public void mobDMG(EntityDamageByEntityEvent event) {
 
-        Creature defender = null;
-
-        if (event.getEntity() instanceof Creature) {
-            defender = (Creature) event.getEntity();
-        }
-        Player attacker = null;
-
-        if (event.getDamager() instanceof Player) {
-            attacker = (Player) event.getDamager();
+        if (event.getEntity() instanceof Creature && event.getDamager() instanceof Player) {
+           Creature defender = (Creature) event.getEntity();
+           Player attacker = (Player) event.getDamager();
 
             HealthMechanics.in_combat.put(attacker.getName(), System.currentTimeMillis());
 
             System.out.println(attacker.getName() + " is now in combat!");
 
-        }
-
-        if (defender != null || attacker != null) {
             ItemStack weapon = null;
 
             if (attacker.getEquipment().getItemInHand() != null) {
@@ -136,41 +115,42 @@ public class DamageMechanics implements Listener {
 
             int[] stat = ItemMechanics.getDamage(weapon);
 
-            Double rawDmg = stat[0] + Math.random() * (stat[1] - stat[0]);
+            int min_dmg = stat[0];
+            int max_dmg = stat[1];
+
+            int rawDmg = 1;
+
+            try {
+                rawDmg = new Random().nextInt(max_dmg - min_dmg) + min_dmg;
+            } catch (IllegalArgumentException ignored) {}
 
             Double dps = 1 + Math.random() * (PlayerStats.getMaxDPs(attacker.getUniqueId()) - 1);
 
-            long dmg = Math.round(rawDmg * ((dps / 100) + 1));
+            attacker.sendMessage(ChatColor.GREEN + "" + rawDmg);
 
-            long difference = dmg - Math.round(rawDmg);
+            int dmg = (int) Math.round(rawDmg * ((dps / 100) + 1));
+
+            attacker.sendMessage(ChatColor.GREEN + "After " + dmg);
+
+            int difference = dmg - rawDmg;
+
+            attacker.sendMessage(ChatColor.GREEN + "Difference " + difference);
 
             HealthMechanics.updateHealth(attacker);
 
-            Long finalDmg = 1L;
-
-            if (dmg == 0) {
-                finalDmg = 1L;
-            } else {
-                finalDmg = dmg;
-            }
-
-            System.out.println("Final DMG = " + finalDmg + " DMG = " + dmg + " int value = " + finalDmg.intValue());
-            System.out.println("Defender HP = " + defender.getHealth());
-            System.out.println("Bukkit final DMG = " + event.getFinalDamage());
-
-            Long finalDifference = difference;
+            defender.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(0);
 
             if ((defender.getMaxHealth() - dmg) < 0) {
                 defender.damage(defender.getHealth());
             } else {
 //                event.setDamage(EntityDamageEvent.DamageModifier.BASE, finalDmg.intValue());
                 try {
-                    defender.setHealth((defender.getHealth() - finalDmg + event.getFinalDamage()));
+                    defender.setHealth((defender.getHealth() - dmg + event.getFinalDamage()));
                 } catch (IllegalArgumentException ignored) {
                     // Defender is dead
                     defender.damage(defender.getHealth());
                 }
-                event.setDamage(1.0);
+                event.setDamage(0);
                 System.out.println("------------------------");
                 System.out.println("Bukkit final DMG = " + event.getFinalDamage());
             }
@@ -180,8 +160,8 @@ public class DamageMechanics implements Listener {
             Double hp = Double.valueOf(defender.getHealth());
 
             if (true) {
-                attacker.sendMessage(ChatColor.RED + "     " + finalDmg.intValue() + ChatColor.BOLD + " DMG" +
-                        ChatColor.RED + "-> " + ChatColor.GRAY + "[+" + dps.intValue() + "%DPs -> +" + finalDifference.intValue() +
+                attacker.sendMessage(ChatColor.RED + "     " + dmg + ChatColor.BOLD + " DMG" +
+                        ChatColor.RED + "-> " + ChatColor.GRAY + "[+" + dps.intValue() + "%DPs -> +" + difference +
                         " DMG] " + ChatColor.WHITE + defender.getCustomName() + ChatColor.WHITE + " [" + hp.intValue() + ChatColor.BOLD + "HP" + ChatColor.WHITE + "]");
             }
 

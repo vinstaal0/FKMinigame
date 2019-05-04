@@ -128,11 +128,11 @@ public class Durability {
 
         double percentage = durability / (float) getMaxDurability(item);
 
-        player.sendMessage("Durability = " + durability + " -" + percentage);
+//        player.sendMessage("Durability = " + durability + " -" + percentage);
 
         short newDura = (short) (item.getType().getMaxDurability() - (item.getType().getMaxDurability() * percentage));
 
-        player.sendMessage("newDura = " + newDura);
+//        player.sendMessage("newDura = " + newDura);
 
         if (newDura > item.getType().getMaxDurability()) {
             throw new IndexOutOfBoundsException("Durability exceeds max possible durability of item");
@@ -142,11 +142,11 @@ public class Durability {
 
         Damageable d = (Damageable) item.getItemMeta();
 
-        player.sendMessage("new Damage? " + d.getDamage());
+//        player.sendMessage("new Damage? " + d.getDamage());
 
         d.setDamage(newDura - 1);
 
-        player.sendMessage("new Damage 2 " + d.getDamage());
+//        player.sendMessage("new Damage 2 " + d.getDamage());
 
         ItemMeta nim = (ItemMeta) d;
 

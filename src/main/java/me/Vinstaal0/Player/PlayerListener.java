@@ -115,7 +115,7 @@ public class PlayerListener implements Listener {
 
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        player.sendMessage(ChatColor.DARK_PURPLE + "TRIGGER");
+//        player.sendMessage(ChatColor.DARK_PURPLE + "TRIGGER");
 
         if (!Durability.hasCustomDurability(item)) {
             return;
