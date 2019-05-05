@@ -21,6 +21,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -35,8 +36,8 @@ public class FKZombie extends EntityZombie implements FKmob {
     private ItemStack leggings = null;
     private ItemStack boots = null;
 
-    private Tier tier;
-    private Rarity rarity;
+    private Tier tier = Tier.ONE;
+    private Rarity rarity = Rarity.COMMON;
 
     private final ItemStack weapon = null;
 
@@ -80,8 +81,8 @@ public class FKZombie extends EntityZombie implements FKmob {
             zombie = (Zombie) mob;
         }
 
-        this.giveArmour(tier, rarity);
-        this.giveWeapon(tier, rarity);
+        this.giveArmour(this.tier, this.rarity);
+        this.giveWeapon(this.tier, this.rarity);
 
         try {
             this.setHealth();
@@ -89,7 +90,7 @@ public class FKZombie extends EntityZombie implements FKmob {
             e.printStackTrace();
         }
 
-        this.setName(tier, rarity);
+        this.setName(this.tier, this.rarity);
         this.setBaby(false);
     }
 
@@ -105,8 +106,8 @@ public class FKZombie extends EntityZombie implements FKmob {
             zombie = (Zombie) mob;
         }
 
-        this.giveArmour(tier, rarity, armourType);
-        this.giveWeapon(tier, rarity, weaponType);
+        this.giveArmour(this.tier, this.rarity, armourType);
+        this.giveWeapon(this.tier, this.rarity, weaponType);
 
         try {
             this.setHealth();
@@ -114,7 +115,7 @@ public class FKZombie extends EntityZombie implements FKmob {
             e.printStackTrace();
         }
 
-        this.setName(tier, rarity);
+        this.setName(this.tier, this.rarity);
         this.setBaby(false);
     }
 
@@ -159,36 +160,36 @@ public class FKZombie extends EntityZombie implements FKmob {
             case 1 :
                 break;
             case 2 :
-                this.chestPlate = new Armour(tier, rarity,2).getItem();
+                this.chestPlate = new Armour(tier, Rarity.getRandomRarityBelow(rarity),2).getItem();
                 break;
             case 3 :
-                this.leggings = new Armour(tier, rarity,3).getItem();
+                this.leggings = new Armour(tier, Rarity.getRandomRarityBelow(rarity),3).getItem();
                 break;
             case 4 :
-                this.boots = new Armour(tier, rarity,4).getItem();
+                this.boots = new Armour(tier, Rarity.getRandomRarityBelow(rarity),4).getItem();
                 break;
             case 5 :
-                this.chestPlate = new Armour(tier, rarity,2).getItem();
-                this.leggings = new Armour(tier, rarity,3).getItem();
+                this.chestPlate = new Armour(tier, Rarity.getRandomRarityBelow(rarity),2).getItem();
+                this.leggings = new Armour(tier, Rarity.getRandomRarityBelow(rarity),3).getItem();
                 break;
             case 6 :
-                this.leggings = new Armour(tier, rarity,3).getItem();
-                this.boots = new Armour(tier, rarity,4).getItem();
+                this.leggings = new Armour(tier, Rarity.getRandomRarityBelow(rarity),3).getItem();
+                this.boots = new Armour(tier, Rarity.getRandomRarityBelow(rarity),4).getItem();
                 break;
             case 7 :
-                this.chestPlate = new Armour(tier, rarity,2).getItem();
-                this.boots = new Armour(tier, rarity,4).getItem();
+                this.chestPlate = new Armour(tier, Rarity.getRandomRarityBelow(rarity),2).getItem();
+                this.boots = new Armour(tier, Rarity.getRandomRarityBelow(rarity),4).getItem();
                 break;
             case 8 :
-                this.chestPlate = new Armour(tier, rarity,2).getItem();
-                this.leggings = new Armour(tier, rarity,3).getItem();
-                this.boots = new Armour(tier, rarity,4).getItem();
+                this.chestPlate = new Armour(tier, Rarity.getRandomRarityBelow(rarity),2).getItem();
+                this.leggings = new Armour(tier, Rarity.getRandomRarityBelow(rarity),3).getItem();
+                this.boots = new Armour(tier, Rarity.getRandomRarityBelow(rarity),4).getItem();
                 break;
             default :
-                this.helmet = new Armour(tier, rarity,1).getItem();
-                this.chestPlate = new Armour(tier, rarity,2).getItem();
-                this.leggings = new Armour(tier, rarity,3).getItem();
-                this.boots = new Armour(tier, rarity,4).getItem();
+                this.helmet = new Armour(tier, Rarity.getRandomRarityBelow(rarity),1).getItem();
+                this.chestPlate = new Armour(tier, Rarity.getRandomRarityBelow(rarity),2).getItem();
+                this.leggings = new Armour(tier, Rarity.getRandomRarityBelow(rarity),3).getItem();
+                this.boots = new Armour(tier, Rarity.getRandomRarityBelow(rarity),4).getItem();
                 break;
         }
 
@@ -398,12 +399,8 @@ public class FKZombie extends EntityZombie implements FKmob {
 
         for (ItemStack armourPiece : armour) {
 
-            System.out.println("armourpieces " + armourPiece);
-
             if (ItemMechanics.isArmor(armourPiece)) {
                 List<String> lore = armourPiece.getItemMeta().getLore();
-
-                System.out.println("Lore " + lore);
 
                 for (String line : lore) {
                     // get hps
@@ -412,11 +409,7 @@ public class FKZombie extends EntityZombie implements FKmob {
                         // keep after hps
                     } else if (line.contains("HP")) {
 
-                        System.out.println("Piece = " + armourPiece);
-                        System.out.println("HP = " + hp.intValue());
-                        System.out.println("Adding = " + ItemMechanics.getStat(armourPiece, lore.indexOf(line)));
                         hp += ItemMechanics.getStat(armourPiece, lore.indexOf(line));
-                        System.out.println("HP = " + hp.intValue());
 
                     } else if (line.contains("ENERGY")) {
 

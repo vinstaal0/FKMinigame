@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
@@ -62,6 +63,10 @@ public class DamageMechanics implements Listener {
 
                 int dmg = (int) Math.round(rawDmg * ((100 - armor) / 100));
 
+                if (dmg < 1) {
+                    dmg = 1;
+                }
+
                 int difference = rawDmg - dmg;
 
                 HealthMechanics.updateHealth(defender);
@@ -113,6 +118,11 @@ public class DamageMechanics implements Listener {
                 weapon = attacker.getEquipment().getItemInHand();
             }
 
+            if (EnergyMechanics.isFatigued(attacker)) {
+                event.setCancelled(true);
+                return;
+            }
+
             int[] stat = ItemMechanics.getDamage(weapon);
 
             int min_dmg = stat[0];
@@ -126,15 +136,9 @@ public class DamageMechanics implements Listener {
 
             Double dps = 1 + Math.random() * (PlayerStats.getMaxDPs(attacker.getUniqueId()) - 1);
 
-            attacker.sendMessage(ChatColor.GREEN + "" + rawDmg);
-
             int dmg = (int) Math.round(rawDmg * ((dps / 100) + 1));
 
-            attacker.sendMessage(ChatColor.GREEN + "After " + dmg);
-
             int difference = dmg - rawDmg;
-
-            attacker.sendMessage(ChatColor.GREEN + "Difference " + difference);
 
             HealthMechanics.updateHealth(attacker);
 
@@ -143,16 +147,13 @@ public class DamageMechanics implements Listener {
             if ((defender.getMaxHealth() - dmg) < 0) {
                 defender.damage(defender.getHealth());
             } else {
-//                event.setDamage(EntityDamageEvent.DamageModifier.BASE, finalDmg.intValue());
                 try {
-                    defender.setHealth((defender.getHealth() - dmg + event.getFinalDamage()));
+                    event.setDamage(0);
+                    defender.setHealth((defender.getHealth() - dmg));
                 } catch (IllegalArgumentException ignored) {
                     // Defender is dead
                     defender.damage(defender.getHealth());
                 }
-                event.setDamage(0);
-                System.out.println("------------------------");
-                System.out.println("Bukkit final DMG = " + event.getFinalDamage());
             }
 
             HealthMechanics.updateHealth(attacker);
@@ -167,6 +168,8 @@ public class DamageMechanics implements Listener {
 
             try {
                 if (defender.isDead()) {
+
+                    MonsterMechanics.getTier(defender);
 
                     Zombie zombie = null;
 

@@ -69,7 +69,7 @@ public class EnergyMechanics implements Listener {
             public void run() {
                 replenishEnergy();
             }
-        }.runTaskTimerAsynchronously(plugin, 2 * 20L, 2L);
+        }.runTaskTimerAsynchronously(plugin, 2 * 20L, 3L);
 
         // Handles the 2 second 'delay' when you run out of energy.
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
@@ -193,6 +193,7 @@ public class EnergyMechanics implements Listener {
             updatePlayerLevel(player);
 
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 50, 4));
+            player.playSound(player.getLocation(), Sound.ENTITY_WOLF_PANT, 1f, 1f);
 
             return;
         }
@@ -304,6 +305,10 @@ public class EnergyMechanics implements Listener {
                 player.setSprinting(false);
             }
         }, 1L);
+    }
+
+    public static boolean isFatigued(Player player) {
+        return fatigueEffect.containsKey(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)

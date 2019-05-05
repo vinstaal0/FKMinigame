@@ -1,5 +1,6 @@
 package me.Vinstaal0.Mechanics;
 
+import me.Vinstaal0.Mechanics.ItemMechanics.ItemMechanics;
 import me.Vinstaal0.Mechanics.ItemMechanics.Items.Weapon;
 import me.Vinstaal0.Mechanics.Monsters.Base.FKZombie;
 import me.Vinstaal0.Minigame;
@@ -7,6 +8,8 @@ import me.Vinstaal0.Utility.Rarity;
 import me.Vinstaal0.Utility.Tier;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Creature;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -53,6 +56,26 @@ public class MonsterMechanics {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static Tier getTier(Creature mob) {
+        ItemStack[] armour = mob.getEquipment().getArmorContents();
+        ItemStack weapon = mob.getEquipment().getItemInMainHand();
+
+        Tier tier = Tier.ONE;
+
+        for (ItemStack i : armour) {
+
+            if (i != null) {
+                tier = ItemMechanics.getTier(i);
+            }
+        }
+
+        if (weapon != null) {
+            tier = ItemMechanics.getTier(weapon);
+        }
+
+        return tier;
     }
 
 }
